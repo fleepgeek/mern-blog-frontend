@@ -30,9 +30,14 @@ export default function Navbar() {
               <DropdownMenuContent>
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="flex flex-col items-start gap-1">
-                  <p>{user?.name}</p>
-                  <Link to="/profile">{user?.email}</Link>
+                <DropdownMenuItem>
+                  <Link
+                    to="/profile"
+                    className="flex flex-col items-start gap-1"
+                  >
+                    <p>{user?.name}</p>
+                    {user?.email}
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
                   <Button onClick={() => logout()} className="w-full">

@@ -1,5 +1,6 @@
 import { useAuth0 } from "@auth0/auth0-react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { User } from "../types";
 
 type UserData = {
   auth0Id: string | undefined;
@@ -33,4 +34,33 @@ export const useCreateCurrentUser = () => {
   });
 
   return { createUser, isPending };
+};
+
+export const useGetCurrentUser = () => {
+  const { getAccessTokenSilently } = useAuth0();
+
+  const getCurrentUserRequest = async (): Promise<User> => {
+    const accessToken = await getAccessTokenSilently();
+
+    const response = await fetch(`${API_BASE_URL}/api/my/user`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to get current user");
+    }
+
+    return response.json();
+  };
+
+  const { data: currentUser, isLoading } = useQuery({
+    queryKey: ["get-current-user"],
+    queryFn: getCurrentUserRequest,
+  });
+
+  return { currentUser, isLoading };
 };
