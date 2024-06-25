@@ -1,12 +1,12 @@
-import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import HomePage from "./pages/HomePage";
+import AuthVerifyCallbackPage from "./pages/AuthVerifyCallbackPage";
 
 export default function AppRoutes() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-      </Routes>
-    </Router>
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/auth-verify" element={<AuthVerifyCallbackPage />} />
+    </Routes>
   );
 }
