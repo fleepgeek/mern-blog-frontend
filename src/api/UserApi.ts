@@ -1,18 +1,27 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { User } from "../types";
+import { toast } from "sonner";
+import { UserFormData } from "../forms/UserProfileForm";
 
-type UserData = {
-  auth0Id: string | undefined;
-  email: string | undefined;
+type UserCreateData = {
+  auth0Id: string;
+  email: string;
 };
+
+// type UserUpdateData = {
+//   name: string;
+//   bio: string;
+// };
+
+type UserUpdateData = Omit<UserFormData, "email">;
 
 const API_BASE_URL = "http://localhost:7000";
 
 export const useCreateCurrentUser = () => {
   const { getAccessTokenSilently } = useAuth0();
 
-  const createCurrentUserRequest = async (userData: UserData) => {
+  const createCurrentUserRequest = async (userData: UserCreateData) => {
     const accessToken = await getAccessTokenSilently();
 
     const response = await fetch(`${API_BASE_URL}/api/my/user`, {
@@ -63,4 +72,34 @@ export const useGetCurrentUser = () => {
   });
 
   return { currentUser, isLoading };
+};
+
+export const useUpdateCurrentUser = () => {
+  const { getAccessTokenSilently } = useAuth0();
+
+  const updateCurrentUserRequest = async (userData: UserUpdateData) => {
+    const accessToken = await getAccessTokenSilently();
+
+    const response = await fetch(`${API_BASE_URL}/api/my/user`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userData),
+    });
+
+    if (!response.ok) {
+      throw new Error("User update failed!");
+    }
+  };
+
+  const { mutate: updateUser, isPending: userUpdateIsLoading } = useMutation({
+    mutationFn: updateCurrentUserRequest,
+    onSuccess: () => {
+      toast.success("User succefully updated.");
+    },
+  });
+
+  return { updateUser, userUpdateIsLoading };
 };

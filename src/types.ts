@@ -1,5 +1,5 @@
 export type User = {
-  auth0Id: string;
+  _id: string;
   name: string;
   bio: string;
   email: string;

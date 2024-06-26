@@ -1,9 +1,10 @@
 import { Loader2 } from "lucide-react";
-import { useGetCurrentUser } from "../api/UserApi";
+import { useGetCurrentUser, useUpdateCurrentUser } from "../api/UserApi";
 import UserProfileForm from "../forms/UserProfileForm";
 
 export default function UserProfilePage() {
   const { currentUser, isLoading } = useGetCurrentUser();
+  const { updateUser, userUpdateIsLoading } = useUpdateCurrentUser();
 
   if (isLoading) {
     return (
@@ -17,5 +18,11 @@ export default function UserProfilePage() {
     return <h3 className="text-xl">Failed to get user</h3>;
   }
 
-  return <UserProfileForm user={currentUser} />;
+  return (
+    <UserProfileForm
+      user={currentUser}
+      onSave={updateUser}
+      isLoading={userUpdateIsLoading}
+    />
+  );
 }

@@ -15,6 +15,7 @@ import { Button } from "../components/ui/button";
 import { Textarea } from "../components/ui/textarea";
 import { User } from "../types";
 import { useEffect } from "react";
+import LoadingButton from "../components/LoadingButton";
 
 const formSchema = z.object({
   email: z.string().optional(),
@@ -22,13 +23,19 @@ const formSchema = z.object({
   bio: z.string().min(2, { message: "Please add a short bio about yourself" }),
 });
 
-type UserFormData = z.infer<typeof formSchema>;
+export type UserFormData = z.infer<typeof formSchema>;
 
 type UserProfileFormProps = {
   user: User;
+  isLoading: boolean;
+  onSave: (userData: UserFormData) => void;
 };
 
-export default function UserProfileForm({ user }: UserProfileFormProps) {
+export default function UserProfileForm({
+  user,
+  isLoading,
+  onSave,
+}: UserProfileFormProps) {
   const form = useForm<UserFormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -44,12 +51,7 @@ export default function UserProfileForm({ user }: UserProfileFormProps) {
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit((values: UserFormData) => {
-          console.log(values);
-        })}
-        className="space-y-8"
-      >
+      <form onSubmit={form.handleSubmit(onSave)} className="space-y-8">
         <div>
           <h2 className="text-2xl font-bold">Profile</h2>
           <FormDescription>Update your account information</FormDescription>
@@ -96,7 +98,11 @@ export default function UserProfileForm({ user }: UserProfileFormProps) {
           )}
         />
 
-        <Button type="submit">Update Info</Button>
+        {isLoading ? (
+          <LoadingButton>Updating...</LoadingButton>
+        ) : (
+          <Button type="submit">Update Info</Button>
+        )}
       </form>
     </Form>
   );

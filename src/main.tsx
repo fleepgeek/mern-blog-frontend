@@ -34,9 +34,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <Auth0ProviderWithRedirect>
         <QueryClientProvider client={queryClient}>
           <AppRoutes />
+          <Toaster position="top-right" richColors />
         </QueryClientProvider>
       </Auth0ProviderWithRedirect>
-      <Toaster position="top-right" />
     </Router>
   </React.StrictMode>,
 );
