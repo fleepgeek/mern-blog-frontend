@@ -19,8 +19,11 @@ import LoadingButton from "../components/LoadingButton";
 
 const formSchema = z.object({
   email: z.string().optional(),
-  name: z.string().min(2, { message: "Please fill in your name" }),
-  bio: z.string().min(2, { message: "Please add a short bio about yourself" }),
+  name: z.string().trim().min(2, { message: "Please fill in your name" }),
+  bio: z
+    .string()
+    .trim()
+    .min(2, { message: "Please add a short bio about yourself" }),
 });
 
 export type UserFormData = z.infer<typeof formSchema>;
