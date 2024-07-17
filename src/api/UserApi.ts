@@ -16,7 +16,7 @@ type UserCreateData = {
 
 type UserUpdateData = Omit<UserFormData, "email">;
 
-const API_BASE_URL = "http://localhost:7000";
+const USER_API_BASE_URL = import.meta.env.VITE_API_BASE_URL + "/api/my/user";
 
 export const useCreateCurrentUser = () => {
   const { getAccessTokenSilently } = useAuth0();
@@ -24,7 +24,7 @@ export const useCreateCurrentUser = () => {
   const createCurrentUserRequest = async (userData: UserCreateData) => {
     const accessToken = await getAccessTokenSilently();
 
-    const response = await fetch(`${API_BASE_URL}/api/my/user`, {
+    const response = await fetch(USER_API_BASE_URL, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -51,7 +51,7 @@ export const useGetCurrentUser = () => {
   const getCurrentUserRequest = async (): Promise<User> => {
     const accessToken = await getAccessTokenSilently();
 
-    const response = await fetch(`${API_BASE_URL}/api/my/user`, {
+    const response = await fetch(USER_API_BASE_URL, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -80,7 +80,7 @@ export const useUpdateCurrentUser = () => {
   const updateCurrentUserRequest = async (userData: UserUpdateData) => {
     const accessToken = await getAccessTokenSilently();
 
-    const response = await fetch(`${API_BASE_URL}/api/my/user`, {
+    const response = await fetch(USER_API_BASE_URL, {
       method: "PUT",
       headers: {
         Authorization: `Bearer ${accessToken}`,

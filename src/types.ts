@@ -4,3 +4,20 @@ export type User = {
   bio: string;
   email: string;
 };
+
+export type Category = {
+  _id: string;
+  name: string;
+};
+
+export type CategoryOption = {
+  label: string;
+  value: string;
+};
+
+export type Article = {
+  _id: string;
+  title: string;
+  category: string;
+  content: string;
+};
