@@ -15,7 +15,7 @@ import NewArticleButton from "./NewArticleButton";
 export default function Navbar() {
   const { isAuthenticated, loginWithRedirect, logout, user } = useAuth0();
   return (
-    <div className="border border-b-gray-400">
+    <div className="border border-b-gray-400 bg-white">
       <div className="container flex min-h-16 items-center justify-between">
         <Link to={"/"} className="text-2xl font-bold">
           MERN Blog

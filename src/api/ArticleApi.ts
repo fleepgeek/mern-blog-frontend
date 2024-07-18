@@ -1,10 +1,11 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { Category } from "../types";
+import { Article, Category } from "../types";
 import { useAuth0 } from "@auth0/auth0-react";
 import { ArticleFormObject } from "../forms/ManageArticleForm";
 import { toast } from "sonner";
 
-const ARTICLE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL + "/api/article";
+const ARTICLE_API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL + "/api/articles";
 
 export const useGetAllCategories = () => {
   const getAllCategoriesRequest = async (): Promise<Category[]> => {
@@ -17,8 +18,9 @@ export const useGetAllCategories = () => {
   };
 
   const { data: categories, isLoading } = useQuery({
-    queryKey: ["fetchCategories"],
+    queryKey: ["fetch-categories"],
     queryFn: getAllCategoriesRequest,
+    staleTime: 1000 * 60 * 5,
   });
 
   return { categories, isLoading };
@@ -87,4 +89,57 @@ export const useUploadImage = () => {
   } = useMutation({ mutationFn: uploadImageRequest });
 
   return { uploadImage, imageUrl, isLoading };
+};
+
+export const useGetArticles = () => {
+  const getArticlesRequest = async (): Promise<Article[]> => {
+    const response = await fetch(ARTICLE_API_BASE_URL, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to get articles");
+    }
+
+    return response.json();
+  };
+
+  const { data: articles, isLoading } = useQuery({
+    queryKey: ["fetch-articles"],
+    queryFn: getArticlesRequest,
+  });
+
+  return { articles, isLoading };
+};
+
+export const useGetSingleArticle = (articleId: string) => {
+  const getSingleArticleRequest = async (): Promise<Article> => {
+    // const getSingleArticleRequest = async () => {
+    const response = await fetch(`${ARTICLE_API_BASE_URL}/${articleId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to get article");
+    }
+
+    return response.json();
+  };
+
+  const { data: article, isLoading } = useQuery({
+    queryKey: ["fetch-single-article", articleId],
+    // queryFn: () => (articleId ? getSingleArticleRequest : null),
+    queryFn: getSingleArticleRequest,
+    staleTime: 1000 * 60 * 5, // 5 mins
+    retry: false,
+    // enabled: !!articleId,
+  });
+
+  return { article, isLoading };
 };

@@ -5,6 +5,7 @@ import MainLayout from "./layouts/MainLayout";
 import UserProfilePage from "./pages/UserProfilePage";
 import PrivateRoute from "./components/PrivateRoute";
 import CreateArticlePage from "./pages/CreateArticlePage";
+import ArticlePage from "./pages/ArticlePage";
 
 export default function AppRoutes() {
   return (
@@ -14,6 +15,14 @@ export default function AppRoutes() {
         element={
           <MainLayout>
             <HomePage />
+          </MainLayout>
+        }
+      />
+      <Route
+        path="/articles/:id"
+        element={
+          <MainLayout>
+            <ArticlePage />
           </MainLayout>
         }
       />

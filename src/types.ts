@@ -18,6 +18,10 @@ export type CategoryOption = {
 export type Article = {
   _id: string;
   title: string;
-  category: string;
+  category: Category;
   content: string;
+  // shortContent: string;
+  author: User;
+  coverImageUrl?: string;
+  createdAt: string;
 };
