@@ -15,17 +15,18 @@ import { Textarea } from "../components/ui/textarea";
 import LoadingButton from "../components/LoadingButton";
 import ComboBox from "../components/ComboBox";
 import { useEffect } from "react";
+import { Article } from "../types";
 
 const formSchema = z.object({
   title: z.string().min(1, { message: "Title is required" }),
   category: z.string().min(1, { message: "Category is required" }),
   content: z.string().min(1, { message: "Content is required" }),
-  coverImageUrl: z.string().min(1, { message: "Cover image is required" }),
+  coverImageUrl: z.string(),
 });
 
 export type ArticleFormObject = z.infer<typeof formSchema>;
 
-type ManageArticleFormProps = {
+type SaveArticleFormProps = {
   categoryOptions: {
     label: string;
     value: string;
@@ -33,21 +34,23 @@ type ManageArticleFormProps = {
   onSave: (data: ArticleFormObject) => void;
   isLoading: boolean;
   coverImage: string;
+  article?: Article;
 };
 
-export default function ManageArticleForm({
+export default function SaveArticleForm({
   categoryOptions,
   isLoading,
   onSave,
   coverImage,
-}: ManageArticleFormProps) {
+  article,
+}: SaveArticleFormProps) {
   const form = useForm<ArticleFormObject>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: "",
-      category: "",
-      content: "",
-      coverImageUrl: "",
+      title: article?.title || "",
+      category: article?.category._id || "",
+      content: article?.content || "",
+      coverImageUrl: article?.coverImageUrl || "",
     },
   });
 
@@ -115,7 +118,7 @@ export default function ManageArticleForm({
           )}
         />
 
-        {isLoading ? <LoadingButton /> : <Button type="submit">Publish</Button>}
+        {isLoading ? <LoadingButton /> : <Button type="submit">Save</Button>}
       </form>
     </Form>
   );

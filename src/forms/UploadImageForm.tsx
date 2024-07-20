@@ -50,6 +50,10 @@ export default function UploadImageForm({
     [onSave],
   );
 
+  // useEffect(() => {
+  //   form.reset();
+  // }, [coverImage, form]);
+
   return (
     <>
       <Form {...form}>
@@ -58,7 +62,12 @@ export default function UploadImageForm({
             className="group mb-4 flex h-[300px] cursor-pointer items-center justify-center rounded-md bg-gray-200 hover:bg-gray-300"
             onClick={() => fileRef.current?.click()}
           >
-            {coverImage ? (
+            {isLoading ? (
+              <div className="flex flex-col items-center">
+                <FileUp size={36} className="animate-bounce" />
+                <p className="animate-pulse">Uploading...</p>
+              </div>
+            ) : coverImage ? (
               <img
                 src={coverImage}
                 className="h-full w-full rounded-md object-cover"
@@ -66,22 +75,13 @@ export default function UploadImageForm({
               />
             ) : (
               <div className="flex flex-col items-center">
-                {isLoading ? (
-                  <>
-                    <FileUp size={36} className="animate-bounce" />
-                    <p className="animate-pulse">Uploading...</p>
-                  </>
-                ) : (
-                  <>
-                    <ImagePlus
-                      size={36}
-                      className="text-gray-500 group-hover:text-gray-700"
-                    />
-                    <p className="text-gray-500 group-hover:text-gray-700">
-                      Select cover image
-                    </p>
-                  </>
-                )}
+                <ImagePlus
+                  size={36}
+                  className="text-gray-500 group-hover:text-gray-700"
+                />
+                <p className="text-gray-500 group-hover:text-gray-700">
+                  Select cover image
+                </p>
               </div>
             )}
           </div>

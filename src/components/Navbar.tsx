@@ -35,7 +35,7 @@ export default function Navbar() {
                   <DropdownMenuSeparator />
                   <DropdownMenuItem>
                     <Link
-                      to="/profile"
+                      to="/dashboard/profile"
                       className="flex flex-col items-start gap-1"
                     >
                       <p>{user?.name}</p>

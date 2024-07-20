@@ -1,7 +1,7 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Article, Category } from "../types";
 import { useAuth0 } from "@auth0/auth0-react";
-import { ArticleFormObject } from "../forms/ManageArticleForm";
+import { ArticleFormObject } from "../forms/SaveArticleForm";
 import { toast } from "sonner";
 
 const ARTICLE_API_BASE_URL =
@@ -20,7 +20,7 @@ export const useGetAllCategories = () => {
   const { data: categories, isLoading } = useQuery({
     queryKey: ["fetch-categories"],
     queryFn: getAllCategoriesRequest,
-    staleTime: 1000 * 60 * 5,
+    staleTime: 1000 * 60 * 10, // 10 mins
   });
 
   return { categories, isLoading };
@@ -28,7 +28,9 @@ export const useGetAllCategories = () => {
 
 export const useCreateArticle = () => {
   const { getAccessTokenSilently } = useAuth0();
-  const createArticleRequest = async (articleData: ArticleFormObject) => {
+  const createArticleRequest = async (
+    articleData: ArticleFormObject,
+  ): Promise<Article> => {
     const accessToken = await getAccessTokenSilently();
 
     const response = await fetch(ARTICLE_API_BASE_URL, {
@@ -47,6 +49,8 @@ export const useCreateArticle = () => {
     return response.json();
   };
 
+  const queryClient = useQueryClient();
+
   const {
     mutate: createArticle,
     data,
@@ -54,7 +58,9 @@ export const useCreateArticle = () => {
   } = useMutation({
     mutationFn: createArticleRequest,
     onSuccess: () => {
-      toast.success("Article succefully created.");
+      queryClient.invalidateQueries({ queryKey: ["fetch-articles"] });
+      queryClient.invalidateQueries({ queryKey: ["fetch-user-articles"] });
+      toast.success("Article successfully created.");
     },
   });
 
@@ -110,6 +116,32 @@ export const useGetArticles = () => {
   const { data: articles, isLoading } = useQuery({
     queryKey: ["fetch-articles"],
     queryFn: getArticlesRequest,
+    staleTime: 1000 * 60 * 10, // 10 mins
+  });
+
+  return { articles, isLoading };
+};
+
+export const useGetUserArticles = (userId: string) => {
+  const getUserArticlesRequest = async (): Promise<Article[]> => {
+    const response = await fetch(`${ARTICLE_API_BASE_URL}/user/${userId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to get user articles");
+    }
+
+    return response.json();
+  };
+
+  const { data: articles, isLoading } = useQuery({
+    queryKey: ["fetch-user-articles", userId],
+    queryFn: getUserArticlesRequest,
+    staleTime: 1000 * 60 * 10, // 10 mins
   });
 
   return { articles, isLoading };
@@ -132,14 +164,63 @@ export const useGetSingleArticle = (articleId: string) => {
     return response.json();
   };
 
-  const { data: article, isLoading } = useQuery({
+  const {
+    data: article,
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: ["fetch-single-article", articleId],
     // queryFn: () => (articleId ? getSingleArticleRequest : null),
     queryFn: getSingleArticleRequest,
-    staleTime: 1000 * 60 * 5, // 5 mins
+    staleTime: 1000 * 60 * 10, // 10 mins
     retry: false,
-    // enabled: !!articleId,
+    enabled: !!articleId,
   });
 
-  return { article, isLoading };
+  return { article, isLoading, refetch };
+};
+
+export const useUpdateArticle = (articleId: string) => {
+  const { getAccessTokenSilently } = useAuth0();
+  const updateArticleRequest = async (
+    articleData: ArticleFormObject,
+  ): Promise<Article> => {
+    const accessToken = await getAccessTokenSilently();
+
+    const response = await fetch(`${ARTICLE_API_BASE_URL}/${articleId}`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(articleData),
+    });
+
+    if (!response.ok) {
+      const responseText = await response.text();
+      const message = JSON.parse(responseText).message;
+      throw new Error(`Failed to update article. ${message && message}`);
+    }
+
+    return response.json();
+  };
+
+  const queryClient = useQueryClient();
+
+  const { mutate: updateArticle, isPending: isLoading } = useMutation({
+    mutationKey: [articleId],
+    mutationFn: updateArticleRequest,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["fetch-articles"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["fetch-single-article", articleId],
+      });
+      queryClient.invalidateQueries({ queryKey: ["fetch-user-articles"] });
+      toast.success("Article successfully updated.");
+    },
+  });
+
+  return { updateArticle, isLoading };
 };

@@ -69,6 +69,7 @@ export const useGetCurrentUser = () => {
   const { data: currentUser, isLoading } = useQuery({
     queryKey: ["get-current-user"],
     queryFn: getCurrentUserRequest,
+    staleTime: 1000 * 60 * 10, // 10 mins
   });
 
   return { currentUser, isLoading };

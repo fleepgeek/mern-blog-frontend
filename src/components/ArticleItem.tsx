@@ -16,7 +16,9 @@ export default function ArticleItem({ article }: ArticleItemProps) {
         <div className="flex w-full items-stretch gap-4 border-b pb-8">
           <div className="flex flex-1 flex-col">
             <div className="flex-1">
-              <h3 className="mb-2 text-2xl font-bold">{article.title}</h3>
+              <h3 className="mb-2 line-clamp-3 text-2xl font-bold">
+                {article.title}
+              </h3>
               <p className="mb-2 line-clamp-1 text-gray-600">
                 {article.content}
               </p>
