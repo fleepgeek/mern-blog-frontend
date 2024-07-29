@@ -147,7 +147,9 @@ export const useGetUserArticles = (userId: string) => {
   return { articles, isLoading };
 };
 
-export const useGetSingleArticle = (articleId: string) => {
+// We make articleId optional because useParams would first render with undefined
+// before the id is gotten. Its kind of a hooks things. It renders a bunch of times
+export const useGetSingleArticle = (articleId?: string) => {
   const getSingleArticleRequest = async (): Promise<Article> => {
     // const getSingleArticleRequest = async () => {
     const response = await fetch(`${ARTICLE_API_BASE_URL}/${articleId}`, {

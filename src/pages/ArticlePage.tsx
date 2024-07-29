@@ -8,7 +8,7 @@ import { cn } from "../lib/utils";
 
 export default function ArticlePage() {
   const { id } = useParams();
-  const { article, isLoading } = useGetSingleArticle(id as string);
+  const { article, isLoading } = useGetSingleArticle(id);
 
   if (isLoading) {
     return (

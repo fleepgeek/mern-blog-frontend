@@ -8,7 +8,7 @@ import {
   FormItem,
   FormMessage,
 } from "../components/ui/form";
-import { useCallback, useRef } from "react";
+import { useRef } from "react";
 import { FileUp, ImagePlus } from "lucide-react";
 import { Input } from "../components/ui/input";
 
@@ -40,15 +40,16 @@ export default function UploadImageForm({
     },
   });
 
-  const onSubmit = useCallback(
-    (imageData: ImageFormData) => {
-      const formData = new FormData();
-      formData.append("imageFile", imageData.imageFile);
+  // const onSubmit = useCallback(
+  const onSubmit = (imageData: ImageFormData) => {
+    const formData = new FormData();
+    formData.append("imageFile", imageData.imageFile);
 
-      onSave(formData);
-    },
-    [onSave],
-  );
+    onSave(formData);
+  };
+  //   ,
+  //   [onSave],
+  // );
 
   // useEffect(() => {
   //   form.reset();
@@ -93,7 +94,7 @@ export default function UploadImageForm({
               <FormItem>
                 <FormControl>
                   {/* can use normal input and enable hidden.
-                  hidden doesn ork for shadcn Input that's why class is used. */}
+                  hidden doesn work for shadcn Input that's why className is used. */}
                   <Input
                     type="file"
                     ref={fileRef}
