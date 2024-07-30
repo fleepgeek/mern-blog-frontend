@@ -7,7 +7,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import SaveArticlePage from "./pages/SaveArticlePage";
 import ArticlePage from "./pages/ArticlePage";
 import DashboardLayout from "./layouts/DashboardLayout";
-import ManageArticlesPage from "./pages/ManageArticlesPage";
+import ManageArticlesPage from "./pages/ManageArticlesPage.1";
 import NotFoundPage from "./pages/NotFoundPage";
 
 export default function AppRoutes() {

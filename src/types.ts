@@ -25,3 +25,12 @@ export type Article = {
   coverImageUrl?: string;
   createdAt: string;
 };
+
+export type ArticleApiResponse = {
+  pagingInfo: {
+    total: number;
+    page: number;
+    pages: number;
+  };
+  articles: Article[];
+};

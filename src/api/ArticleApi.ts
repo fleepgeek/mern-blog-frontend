@@ -1,5 +1,11 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Article, Category } from "../types";
+import {
+  keepPreviousData,
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
+import { Article, ArticleApiResponse, Category } from "../types";
 import { useAuth0 } from "@auth0/auth0-react";
 import { ArticleFormObject } from "../forms/SaveArticleForm";
 import { toast } from "sonner";
@@ -98,8 +104,10 @@ export const useUploadImage = () => {
 };
 
 export const useGetArticles = () => {
-  const getArticlesRequest = async (): Promise<Article[]> => {
-    const response = await fetch(ARTICLE_API_BASE_URL, {
+  const getArticlesRequest = async ({
+    pageParam = 1,
+  }): Promise<ArticleApiResponse> => {
+    const response = await fetch(`${ARTICLE_API_BASE_URL}?page=${pageParam}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -113,23 +121,40 @@ export const useGetArticles = () => {
     return response.json();
   };
 
-  const { data: articles, isLoading } = useQuery({
-    queryKey: ["fetch-articles"],
-    queryFn: getArticlesRequest,
-    staleTime: 1000 * 60 * 10, // 10 mins
-  });
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
+    useInfiniteQuery({
+      queryKey: ["fetch-articles"],
+      queryFn: getArticlesRequest,
+      initialPageParam: 1,
+      getNextPageParam: (lastPage) => {
+        if (lastPage.pagingInfo.page === lastPage.pagingInfo.pages) {
+          return null;
+        }
+        return lastPage.pagingInfo.page + 1;
+      },
+      staleTime: 1000 * 60 * 10, // 10 mins
+    });
 
-  return { articles, isLoading };
+  return {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+  };
 };
 
-export const useGetUserArticles = (userId: string) => {
-  const getUserArticlesRequest = async (): Promise<Article[]> => {
-    const response = await fetch(`${ARTICLE_API_BASE_URL}/user/${userId}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
+export const useGetUserArticles = (userId?: string, page?: number) => {
+  const getUserArticlesRequest = async (): Promise<ArticleApiResponse> => {
+    const response = await fetch(
+      `${ARTICLE_API_BASE_URL}/user/${userId}?page=${page}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
       },
-    });
+    );
 
     if (!response.ok) {
       throw new Error("Failed to get user articles");
@@ -138,13 +163,19 @@ export const useGetUserArticles = (userId: string) => {
     return response.json();
   };
 
-  const { data: articles, isLoading } = useQuery({
-    queryKey: ["fetch-user-articles", userId],
+  const { data, isLoading, refetch } = useQuery({
+    queryKey: ["fetch-user-articles", userId, page],
     queryFn: getUserArticlesRequest,
+    enabled: !!userId,
+    placeholderData: keepPreviousData,
     staleTime: 1000 * 60 * 10, // 10 mins
   });
 
-  return { articles, isLoading };
+  return {
+    data,
+    isLoading,
+    refetch,
+  };
 };
 
 // We make articleId optional because useParams would first render with undefined
