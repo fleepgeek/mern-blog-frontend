@@ -1,17 +1,25 @@
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { buttonVariants } from "./ui/button";
 import { Category } from "../types";
+import { cn } from "../lib/utils";
 
 type CategoryChipProps = {
   category: Category;
 };
 export default function CategoryChip({ category }: CategoryChipProps) {
   return (
-    <Link
+    <NavLink
       to={`/category/${category._id}`}
-      className={`${buttonVariants({ variant: "ghost" })} rounded-3xl bg-gray-200 hover:bg-gray-300`}
+      className={({ isActive }) =>
+        // `${buttonVariants({ variant: "ghost" })} rounded-3xl bg-gray-200 hover:bg-gray-400 ${isActive && "bg-gray-400"}`
+        cn(
+          buttonVariants({ variant: "ghost" }),
+          "rounded-3xl bg-gray-200 hover:bg-gray-400",
+          isActive && "bg-gray-400",
+        )
+      }
     >
       {category.name}
-    </Link>
+    </NavLink>
   );
 }

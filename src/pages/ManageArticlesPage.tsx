@@ -1,20 +1,28 @@
 import { Loader2 } from "lucide-react";
-
 import { useGetUserArticles } from "../api/ArticleApi";
-
+import { useSearchParams } from "react-router-dom";
 import { useGetCurrentUser } from "../api/UserApi";
 import NewArticleButton from "../components/NewArticleButton";
 import PaginationControl from "../components/PaginationControl";
-import { useState } from "react";
 import ArticleTable from "../components/ArticleTable";
 
 export default function ManageArticlesPage() {
-  const [page, setPage] = useState(1);
+  const [searchParams, setSearchParams] = useSearchParams({ page: "1" });
   const { currentUser } = useGetCurrentUser();
+  const queryObject = {
+    page: parseInt(searchParams.get("page") as string),
+  };
   const { data, isLoading } = useGetUserArticles(
+    queryObject,
     currentUser?._id as string,
-    page,
   );
+
+  const setPage = (page: number) => {
+    setSearchParams((prevSearchParams) => {
+      prevSearchParams.set("page", page.toString());
+      return prevSearchParams;
+    });
+  };
 
   if (isLoading) {
     return (

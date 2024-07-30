@@ -14,7 +14,7 @@ import { Toaster, toast } from "sonner";
 
 const queryClient = new QueryClient({
   defaultOptions: {
-    queries: { refetchOnWindowFocus: false },
+    queries: { refetchOnWindowFocus: false, retry: false },
   },
   queryCache: new QueryCache({
     onError: (error) => {

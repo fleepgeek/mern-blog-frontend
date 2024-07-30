@@ -7,8 +7,9 @@ import PrivateRoute from "./components/PrivateRoute";
 import SaveArticlePage from "./pages/SaveArticlePage";
 import ArticlePage from "./pages/ArticlePage";
 import DashboardLayout from "./layouts/DashboardLayout";
-import ManageArticlesPage from "./pages/ManageArticlesPage.1";
+import ManageArticlesPage from "./pages/ManageArticlesPage";
 import NotFoundPage from "./pages/NotFoundPage";
+import ArticlesByCategoryPage from "./pages/ArticlesByCategoryPage";
 
 export default function AppRoutes() {
   return (
@@ -26,6 +27,14 @@ export default function AppRoutes() {
         element={
           <MainLayout>
             <ArticlePage />
+          </MainLayout>
+        }
+      />
+      <Route
+        path="/category/:id"
+        element={
+          <MainLayout>
+            <ArticlesByCategoryPage />
           </MainLayout>
         }
       />

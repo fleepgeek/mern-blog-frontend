@@ -108,28 +108,33 @@ export const useUploadImage = () => {
   return { uploadImage, imageUrl, isLoading };
 };
 
+const getArticlesRequest = async (
+  pageParam: number,
+  categoryId?: string,
+): Promise<ArticleApiResponse> => {
+  const url = categoryId
+    ? `${ARTICLE_API_BASE_URL}/category/${categoryId}?page=${pageParam}`
+    : `${ARTICLE_API_BASE_URL}?page=${pageParam}`;
+
+  const response = await fetch(url, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to get articles");
+  }
+
+  return response.json();
+};
+
 export const useGetArticles = () => {
-  const getArticlesRequest = async ({
-    pageParam = 1,
-  }): Promise<ArticleApiResponse> => {
-    const response = await fetch(`${ARTICLE_API_BASE_URL}?page=${pageParam}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error("Failed to get articles");
-    }
-
-    return response.json();
-  };
-
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useInfiniteQuery({
       queryKey: ["fetch-articles"],
-      queryFn: getArticlesRequest,
+      queryFn: ({ pageParam }) => getArticlesRequest(pageParam),
       initialPageParam: 1,
       getNextPageParam: (lastPage) => {
         if (lastPage.pagingInfo.page === lastPage.pagingInfo.pages) {
@@ -139,6 +144,33 @@ export const useGetArticles = () => {
       },
       staleTime: 1000 * 60 * 10, // 10 mins
     });
+
+  return {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+  };
+};
+
+export const useGetArticlesByCategory = (categoryId?: string) => {
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
+    useInfiniteQuery({
+      queryKey: ["fetch-articles-in-category", categoryId],
+      queryFn: ({ pageParam }) => getArticlesRequest(pageParam, categoryId),
+      initialPageParam: 1,
+      getNextPageParam: (lastPage) => {
+        if (lastPage.pagingInfo.page === lastPage.pagingInfo.pages) {
+          return null;
+        }
+        return lastPage.pagingInfo.page + 1;
+      },
+      enabled: !!categoryId,
+      staleTime: 1000 * 60 * 10, // 10 mins
+    });
+
+  console.log(data);
 
   return {
     data,

@@ -8,6 +8,7 @@ export type User = {
 export type Category = {
   _id: string;
   name: string;
+  slug: string;
 };
 
 export type CategoryOption = {
