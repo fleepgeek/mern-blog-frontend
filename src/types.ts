@@ -34,3 +34,7 @@ export type ArticleApiResponse = {
   };
   articles: Article[];
 };
+
+export type ArticleQueryObject = {
+  page: number;
+};

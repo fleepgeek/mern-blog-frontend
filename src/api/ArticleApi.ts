@@ -5,7 +5,12 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
-import { Article, ArticleApiResponse, Category } from "../types";
+import {
+  Article,
+  ArticleApiResponse,
+  ArticleQueryObject,
+  Category,
+} from "../types";
 import { useAuth0 } from "@auth0/auth0-react";
 import { ArticleFormObject } from "../forms/SaveArticleForm";
 import { toast } from "sonner";
@@ -144,10 +149,16 @@ export const useGetArticles = () => {
   };
 };
 
-export const useGetUserArticles = (userId?: string, page?: number) => {
+export const useGetUserArticles = (
+  articleQueryObj: ArticleQueryObject,
+  userId?: string,
+) => {
   const getUserArticlesRequest = async (): Promise<ArticleApiResponse> => {
+    const params = new URLSearchParams();
+    params.set("page", articleQueryObj.page.toString());
+
     const response = await fetch(
-      `${ARTICLE_API_BASE_URL}/user/${userId}?page=${page}`,
+      `${ARTICLE_API_BASE_URL}/user/${userId}?${params.toString()}`,
       {
         method: "GET",
         headers: {
@@ -163,19 +174,15 @@ export const useGetUserArticles = (userId?: string, page?: number) => {
     return response.json();
   };
 
-  const { data, isLoading, refetch } = useQuery({
-    queryKey: ["fetch-user-articles", userId, page],
+  const { data, isLoading } = useQuery({
+    queryKey: ["fetch-user-articles", userId, articleQueryObj],
     queryFn: getUserArticlesRequest,
     enabled: !!userId,
     placeholderData: keepPreviousData,
     staleTime: 1000 * 60 * 10, // 10 mins
   });
 
-  return {
-    data,
-    isLoading,
-    refetch,
-  };
+  return { data, isLoading };
 };
 
 // We make articleId optional because useParams would first render with undefined
