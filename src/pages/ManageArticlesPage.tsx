@@ -3,7 +3,6 @@ import { useGetUserArticles } from "../api/ArticleApi";
 import { useSearchParams } from "react-router-dom";
 import { useGetCurrentUser } from "../api/UserApi";
 import NewArticleButton from "../components/NewArticleButton";
-import PaginationControl from "../components/PaginationControl";
 import ArticleTable from "../components/ArticleTable";
 
 export default function ManageArticlesPage() {
@@ -36,7 +35,7 @@ export default function ManageArticlesPage() {
 
   const { articles, pagingInfo } = data;
 
-  if (articles.length === 0)
+  if (articles.length === 0 && pagingInfo.total === 0)
     return (
       <div className="flex flex-col items-center gap-4">
         <h2 className="text-xl font-bold">
@@ -55,12 +54,10 @@ export default function ManageArticlesPage() {
         </p>
       </div>
 
-      <ArticleTable articles={articles} />
-
-      <PaginationControl
-        page={pagingInfo.page}
-        pages={pagingInfo.pages}
-        onPageChange={setPage}
+      <ArticleTable
+        articles={articles}
+        pagingInfo={pagingInfo}
+        setPage={setPage}
       />
     </div>
   );

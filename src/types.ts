@@ -27,12 +27,14 @@ export type Article = {
   createdAt: string;
 };
 
+export type PagingInfo = {
+  total: number;
+  page: number;
+  pages: number;
+};
+
 export type ArticleApiResponse = {
-  pagingInfo: {
-    total: number;
-    page: number;
-    pages: number;
-  };
+  pagingInfo: PagingInfo;
   articles: Article[];
 };
 

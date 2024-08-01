@@ -31,7 +31,8 @@ export const useGetAllCategories = () => {
   const { data: categories, isLoading } = useQuery({
     queryKey: ["fetch-categories"],
     queryFn: getAllCategoriesRequest,
-    staleTime: 1000 * 60 * 10, // 10 mins
+    staleTime: Infinity,
+    // staleTime: 1000 * 60 * 10, // 10 mins
   });
 
   return { categories, isLoading };
@@ -71,6 +72,9 @@ export const useCreateArticle = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["fetch-articles"] });
       queryClient.invalidateQueries({ queryKey: ["fetch-user-articles"] });
+      queryClient.invalidateQueries({
+        queryKey: ["fetch-articles-by-category"],
+      });
       toast.success("Article successfully created.");
     },
   });
@@ -157,7 +161,7 @@ export const useGetArticles = () => {
 export const useGetArticlesByCategory = (categoryId?: string) => {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useInfiniteQuery({
-      queryKey: ["fetch-articles-in-category", categoryId],
+      queryKey: ["fetch-articles-by-category", categoryId],
       queryFn: ({ pageParam }) => getArticlesRequest(pageParam, categoryId),
       initialPageParam: 1,
       getNextPageParam: (lastPage) => {
@@ -280,7 +284,6 @@ export const useUpdateArticle = (articleId: string) => {
   const queryClient = useQueryClient();
 
   const { mutate: updateArticle, isPending: isLoading } = useMutation({
-    mutationKey: [articleId],
     mutationFn: updateArticleRequest,
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -295,4 +298,37 @@ export const useUpdateArticle = (articleId: string) => {
   });
 
   return { updateArticle, isLoading };
+};
+
+export const useDeleteArticle = () => {
+  const { getAccessTokenSilently } = useAuth0();
+  const deleteArticleRequest = async (articleId: string) => {
+    const accessToken = await getAccessTokenSilently();
+    const response = await fetch(`${ARTICLE_API_BASE_URL}/${articleId}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to delete Article");
+    }
+  };
+
+  const queryClient = useQueryClient();
+
+  const { mutate: onDelete, isPending: isLoading } = useMutation({
+    mutationFn: deleteArticleRequest,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["fetch-articles"] });
+      queryClient.invalidateQueries({ queryKey: ["fetch-user-articles"] });
+      queryClient.invalidateQueries({
+        queryKey: ["fetch-articles-by-category"],
+      });
+      toast.success("Article successfully deleted.");
+    },
+  });
+
+  return { onDelete, isLoading };
 };

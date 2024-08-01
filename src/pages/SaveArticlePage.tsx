@@ -32,8 +32,6 @@ export default function SaveArticlePage() {
     );
   }
 
-  console.log(imageUrl);
-
   return (
     <>
       <UploadImageForm
