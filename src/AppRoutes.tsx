@@ -10,6 +10,7 @@ import DashboardLayout from "./layouts/DashboardLayout";
 import ManageArticlesPage from "./pages/ManageArticlesPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import ArticlesByCategoryPage from "./pages/ArticlesByCategoryPage";
+import SearchPage from "./pages/SearchPage";
 
 export default function AppRoutes() {
   return (
@@ -35,6 +36,14 @@ export default function AppRoutes() {
         element={
           <MainLayout>
             <ArticlesByCategoryPage />
+          </MainLayout>
+        }
+      />
+      <Route
+        path="/search"
+        element={
+          <MainLayout>
+            <SearchPage />
           </MainLayout>
         }
       />

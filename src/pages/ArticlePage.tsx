@@ -34,7 +34,7 @@ export default function ArticlePage() {
           )}
         >
           <CategoryChip category={article.category} />
-          <h1 className="text-6xl font-bold">{article.title}</h1>
+          <h1 className="text-5xl font-bold md:text-6xl">{article.title}</h1>
           {article.coverImageUrl && (
             <div className="h-[400px]">
               <img

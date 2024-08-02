@@ -112,13 +112,26 @@ export const useUploadImage = () => {
   return { uploadImage, imageUrl, isLoading };
 };
 
-const getArticlesRequest = async (
-  pageParam: number,
-  categoryId?: string,
-): Promise<ArticleApiResponse> => {
-  const url = categoryId
-    ? `${ARTICLE_API_BASE_URL}/category/${categoryId}?page=${pageParam}`
-    : `${ARTICLE_API_BASE_URL}?page=${pageParam}`;
+type ArticleRequestParams = {
+  pageParam: number;
+  categoryId?: string;
+  searchQuery?: string;
+};
+
+const getArticlesRequest = async ({
+  pageParam,
+  categoryId,
+  searchQuery,
+}: ArticleRequestParams): Promise<ArticleApiResponse> => {
+  let url = "";
+
+  if (categoryId) {
+    url = `${ARTICLE_API_BASE_URL}/category/${categoryId}?page=${pageParam}`;
+  } else if (searchQuery) {
+    url = `${ARTICLE_API_BASE_URL}/search?searchQuery=${searchQuery}&page=${pageParam}`;
+  } else {
+    url = `${ARTICLE_API_BASE_URL}?page=${pageParam}`;
+  }
 
   const response = await fetch(url, {
     method: "GET",
@@ -138,7 +151,7 @@ export const useGetArticles = () => {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useInfiniteQuery({
       queryKey: ["fetch-articles"],
-      queryFn: ({ pageParam }) => getArticlesRequest(pageParam),
+      queryFn: ({ pageParam }) => getArticlesRequest({ pageParam }),
       initialPageParam: 1,
       getNextPageParam: (lastPage) => {
         if (lastPage.pagingInfo.page === lastPage.pagingInfo.pages) {
@@ -162,7 +175,7 @@ export const useGetArticlesByCategory = (categoryId?: string) => {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useInfiniteQuery({
       queryKey: ["fetch-articles-by-category", categoryId],
-      queryFn: ({ pageParam }) => getArticlesRequest(pageParam, categoryId),
+      queryFn: ({ pageParam }) => getArticlesRequest({ pageParam, categoryId }),
       initialPageParam: 1,
       getNextPageParam: (lastPage) => {
         if (lastPage.pagingInfo.page === lastPage.pagingInfo.pages) {
@@ -183,6 +196,26 @@ export const useGetArticlesByCategory = (categoryId?: string) => {
     isFetchingNextPage,
     isLoading,
   };
+};
+
+export const useSearchArticles = (searchQuery?: string) => {
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
+    useInfiniteQuery({
+      queryKey: ["fetch-searched-articles", searchQuery],
+      queryFn: ({ pageParam }) =>
+        getArticlesRequest({ pageParam, searchQuery }),
+      initialPageParam: 1,
+      getNextPageParam: (lastPage) => {
+        if (lastPage.pagingInfo.page === lastPage.pagingInfo.pages) {
+          return null;
+        }
+        return lastPage.pagingInfo.page + 1;
+      },
+      enabled: !!searchQuery,
+      staleTime: 1000 * 60 * 10, // 10 mins
+    });
+
+  return { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading };
 };
 
 export const useGetUserArticles = (

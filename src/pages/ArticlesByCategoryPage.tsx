@@ -20,7 +20,7 @@ export default function ArticlesByCategoryPage() {
         {state.categoryName}
       </h1>
       <div className="flex grid-cols-3 flex-col gap-16 md:grid">
-        <h1 className="block text-center text-5xl font-bold md:hidden">
+        <h1 className="block text-center text-3xl font-bold md:hidden md:text-5xl">
           {state.categoryName}
         </h1>
         <div className="col-span-2">
