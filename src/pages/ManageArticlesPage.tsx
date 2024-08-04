@@ -4,11 +4,12 @@ import { useSearchParams } from "react-router-dom";
 import { useGetCurrentUser } from "../api/UserApi";
 import NewArticleButton from "../components/NewArticleButton";
 import ArticleTable from "../components/ArticleTable";
+import { ArticleQueryObject } from "../types";
 
 export default function ManageArticlesPage() {
   const [searchParams, setSearchParams] = useSearchParams({ page: "1" });
   const { currentUser } = useGetCurrentUser();
-  const queryObject = {
+  const queryObject: ArticleQueryObject = {
     page: parseInt(searchParams.get("page") as string),
   };
   const { data, isLoading } = useGetUserArticles(

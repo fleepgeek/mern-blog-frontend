@@ -76,13 +76,14 @@ export default function ArticleTable({
 
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
-                      {isLoading && article._id === deletingItem ? (
-                        <LoadingButton />
-                      ) : (
-                        <Button type="button" className="max-h-fit bg-red-500">
-                          <Trash2Icon width={16} />
-                        </Button>
-                      )}
+                      <LoadingButton
+                        type="button"
+                        isLoading={isLoading && article._id === deletingItem}
+                        loadingText=""
+                        className="max-h-fit bg-red-500"
+                      >
+                        <Trash2Icon width={16} />
+                      </LoadingButton>
                     </AlertDialogTrigger>
                     <AlertDialogContent>
                       <AlertDialogHeader>

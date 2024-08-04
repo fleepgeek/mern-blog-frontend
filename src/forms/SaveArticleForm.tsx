@@ -10,7 +10,6 @@ import {
   FormMessage,
 } from "../components/ui/form";
 import { Input } from "../components/ui/input";
-import { Button } from "../components/ui/button";
 import { Textarea } from "../components/ui/textarea";
 import LoadingButton from "../components/LoadingButton";
 import ComboBox from "../components/ComboBox";
@@ -118,7 +117,7 @@ export default function SaveArticleForm({
           )}
         />
 
-        {isLoading ? <LoadingButton /> : <Button type="submit">Save</Button>}
+        <LoadingButton isLoading={isLoading}>Save</LoadingButton>
       </form>
     </Form>
   );
