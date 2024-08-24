@@ -52,14 +52,23 @@ export default function ArticlePage() {
             />
           </div>
         )}
-        <p className="font-bold md:text-left">
-          Written By {article.author.name} on{" "}
-          {intlFormat(
-            new Date(article.createdAt),
-            { dateStyle: "medium" },
-            { locale: "en-US" },
+        <div className="flex items-center justify-between md:justify-normal md:gap-10">
+          <p className="font-bold md:text-left">
+            Written By {article.author.name} on{" "}
+            {intlFormat(
+              new Date(article.createdAt),
+              { dateStyle: "medium" },
+              { locale: "en-US" },
+            )}
+          </p>
+
+          {id && (
+            // <div className="mt-8">
+            <div>
+              <CommentsSheet articleId={id} />
+            </div>
           )}
-        </p>
+        </div>
       </div>
 
       <div className="mt-8 grid gap-12 md:grid-cols-3">
@@ -75,11 +84,6 @@ export default function ArticlePage() {
           </div>
         </div>
       </div>
-      {id && (
-        <div className="mt-8">
-          <CommentsSheet articleId={id} />
-        </div>
-      )}
     </>
   );
 }
