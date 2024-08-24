@@ -29,14 +29,14 @@ export default function Navbar() {
             <SearchBox searchQuery={searchQuery} />
           </div>
         </div>
-        <nav className="flex gap-6 md:gap-8">
+        <nav className="flex items-center gap-6 md:gap-8">
+          <Link to="/search" className="md:hidden">
+            <Search />
+          </Link>
           {!isAuthenticated ? (
             <Button onClick={() => loginWithRedirect()}>Login</Button>
           ) : (
             <>
-              <Link to="/search" className="md:hidden">
-                <Search />
-              </Link>
               <NewArticleButton />
               <DropdownMenu>
                 <DropdownMenuTrigger>

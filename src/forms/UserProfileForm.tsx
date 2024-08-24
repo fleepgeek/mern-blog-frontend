@@ -11,7 +11,6 @@ import {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "../components/ui/input";
-import { Button } from "../components/ui/button";
 import { Textarea } from "../components/ui/textarea";
 import { User } from "../types";
 import { useEffect } from "react";
@@ -101,11 +100,9 @@ export default function UserProfileForm({
           )}
         />
 
-        {isLoading ? (
-          <LoadingButton>Updating...</LoadingButton>
-        ) : (
-          <Button type="submit">Update Info</Button>
-        )}
+        <LoadingButton isLoading={isLoading} loadingText="Updating...">
+          Update Info
+        </LoadingButton>
       </form>
     </Form>
   );

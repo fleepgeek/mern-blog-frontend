@@ -41,3 +41,11 @@ export type ArticleApiResponse = {
 export type ArticleQueryObject = {
   page: number;
 };
+
+export type Comment = {
+  _id: string;
+  user: User;
+  article: Article;
+  content: string;
+  createdAt: string;
+};

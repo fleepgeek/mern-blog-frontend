@@ -1,5 +1,5 @@
 // import { AppState, Auth0Provider, User } from "@auth0/auth0-react";
-import { Auth0Provider } from "@auth0/auth0-react";
+import { AppState, Auth0Provider } from "@auth0/auth0-react";
 import { useNavigate } from "react-router-dom";
 
 type Auth0ProviderWithRedirectProps = {
@@ -20,10 +20,10 @@ export default function Auth0ProviderWithRedirect({
     throw new Error("Can't initialize Authentication");
   }
 
-  // const onRedirectCallback = (appState?: AppState, user?: User) => {
-  const onRedirectCallback = () => {
+  // const onRedirectCallback = () => {
+  const onRedirectCallback = (appState?: AppState) => {
     // Add navigate code here
-    navigate("/auth-verify");
+    navigate("/auth-verify", { state: { returnTo: appState?.returnTo } });
     // console.log(user);
   };
 

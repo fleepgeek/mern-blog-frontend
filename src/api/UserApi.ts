@@ -45,7 +45,7 @@ export const useCreateCurrentUser = () => {
   return { createUser, isPending };
 };
 
-export const useGetCurrentUser = () => {
+export const useGetCurrentUser = (isLoggedIn: boolean) => {
   const { getAccessTokenSilently } = useAuth0();
 
   const getCurrentUserRequest = async (): Promise<User> => {
@@ -70,6 +70,7 @@ export const useGetCurrentUser = () => {
     queryKey: ["get-current-user"],
     queryFn: getCurrentUserRequest,
     staleTime: 1000 * 60 * 10, // 10 mins
+    enabled: isLoggedIn,
   });
 
   return { currentUser, isLoading };
