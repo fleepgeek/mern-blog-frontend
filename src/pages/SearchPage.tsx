@@ -1,6 +1,6 @@
 import { useSearchParams } from "react-router-dom";
 import { useGetAllCategories, useSearchArticles } from "../api/ArticleApi";
-import ArticleList from "../components/ArticleList";
+import ArticleList from "../components/InfiniteArticleList";
 import CategoryList from "../components/CategoryList";
 import { Button } from "../components/ui/button";
 import SearchBox from "../components/SearchBox";

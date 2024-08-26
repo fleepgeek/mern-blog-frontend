@@ -10,9 +10,7 @@ export default function CategoryChip({ category }: CategoryChipProps) {
   return (
     <NavLink
       to={`/category/${category._id}`}
-      state={{ categoryName: category.name, slug: category.slug }}
       className={({ isActive }) =>
-        // `${buttonVariants({ variant: "ghost" })} rounded-3xl bg-gray-200 hover:bg-gray-400 ${isActive && "bg-gray-400"}`
         cn(
           buttonVariants({ variant: "ghost" }),
           "rounded-3xl bg-gray-200 hover:bg-gray-400",

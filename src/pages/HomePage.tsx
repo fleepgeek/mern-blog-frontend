@@ -1,7 +1,6 @@
 import { useGetAllCategories, useGetArticles } from "../api/ArticleApi";
-import ArticleList from "../components/ArticleList";
+import InfiniteArticleList from "../components/InfiniteArticleList";
 import CategoryList from "../components/CategoryList";
-import { Button } from "../components/ui/button";
 
 export default function HomePage() {
   const { categories, isLoading: isCategoryLoading } = useGetAllCategories();
@@ -19,17 +18,12 @@ export default function HomePage() {
   return (
     <div className="grid-cols-3 gap-16 md:grid">
       <div className="col-span-2">
-        <ArticleList data={data} />
-        {hasNextPage && (
-          <Button
-            variant={"outline"}
-            className="mt-4"
-            onClick={() => fetchNextPage()}
-            disabled={!hasNextPage || isFetchingNextPage}
-          >
-            {isFetchingNextPage ? "Loading more..." : "Load More"}
-          </Button>
-        )}
+        <InfiniteArticleList
+          data={data}
+          hasNextPage={hasNextPage}
+          isFetchingNextPage={isFetchingNextPage}
+          onLoadMore={fetchNextPage}
+        />
       </div>
       <div className="mt-8 md:mt-0">
         <h2 className="mb-4 text-xl font-bold">Browse Categories</h2>

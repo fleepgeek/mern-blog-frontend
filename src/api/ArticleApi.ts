@@ -187,8 +187,6 @@ export const useGetArticlesByCategory = (categoryId?: string) => {
       staleTime: 1000 * 60 * 10, // 10 mins
     });
 
-  console.log(data);
-
   return {
     data,
     fetchNextPage,

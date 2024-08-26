@@ -3,6 +3,7 @@ export type User = {
   name: string;
   bio: string;
   email: string;
+  bookmarkedIds: string[];
 };
 
 export type Category = {

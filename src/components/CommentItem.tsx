@@ -7,7 +7,6 @@ import { useState } from "react";
 import CommentForm from "../forms/CommentForm";
 import { useUpdateUserComment } from "../api/CommentApi";
 import { useParams } from "react-router-dom";
-import { useAuth0 } from "@auth0/auth0-react";
 
 type CommentItemProps = {
   comment: Comment;
@@ -19,8 +18,7 @@ export default function CommentItem({
   onSetCommentToDelete,
 }: CommentItemProps) {
   const { id } = useParams();
-  const { isAuthenticated } = useAuth0();
-  const { currentUser } = useGetCurrentUser(isAuthenticated);
+  const { currentUser } = useGetCurrentUser();
   const { updateComment, isLoading } = useUpdateUserComment(id as string);
 
   const [popOverVisible, setPopOverVisible] = useState(false);

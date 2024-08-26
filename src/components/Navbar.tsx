@@ -47,6 +47,15 @@ export default function Navbar() {
                   <DropdownMenuSeparator />
                   <DropdownMenuItem>
                     <Link
+                      to="/bookmarks"
+                      className="flex flex-col items-start gap-1"
+                    >
+                      <p>Bookmarks</p>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>
+                    <Link
                       to="/dashboard/profile"
                       className="flex flex-col items-start gap-1"
                     >

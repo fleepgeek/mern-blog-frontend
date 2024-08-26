@@ -11,6 +11,7 @@ import ManageArticlesPage from "./pages/ManageArticlesPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import ArticlesByCategoryPage from "./pages/ArticlesByCategoryPage";
 import SearchPage from "./pages/SearchPage";
+import UserBookmarks from "./pages/UserBookmarks";
 
 export default function AppRoutes() {
   return (
@@ -70,6 +71,15 @@ export default function AppRoutes() {
           element={
             <MainLayout>
               <SaveArticlePage />
+            </MainLayout>
+          }
+        />
+
+        <Route
+          path="/bookmarks"
+          element={
+            <MainLayout>
+              <UserBookmarks />
             </MainLayout>
           }
         />

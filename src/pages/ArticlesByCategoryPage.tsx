@@ -1,45 +1,46 @@
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import {
   useGetAllCategories,
   useGetArticlesByCategory,
 } from "../api/ArticleApi";
-import ArticleList from "../components/ArticleList";
+import InfiniteArticleList from "../components/InfiniteArticleList";
 import CategoryList from "../components/CategoryList";
-import { Button } from "../components/ui/button";
+import { useMemo } from "react";
 
 export default function ArticlesByCategoryPage() {
   const { categories } = useGetAllCategories();
   const { id } = useParams();
   const { isLoading, data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useGetArticlesByCategory(id);
-  const { state } = useLocation();
+
+  const categoryName = useMemo(
+    () => categories?.find((category) => category._id === id)?.name,
+    [categories, id],
+  );
 
   return (
     <div>
       <h1 className="mb-10 hidden text-center text-5xl font-bold md:block">
-        {state.categoryName}
+        {categoryName}
       </h1>
       <div className="flex grid-cols-3 flex-col gap-16 md:grid">
         <h1 className="block text-center text-3xl font-bold md:hidden md:text-5xl">
-          {state.categoryName}
+          {categoryName}
         </h1>
         <div className="col-span-2">
           {isLoading && <p>Loading Articles...</p>}
           {!isLoading && !data && (
             <h2 className="text-2xl font-bold">
-              No article for the {state.categoryName} category
+              No article for the {categoryName} category
             </h2>
           )}
-          {data && <ArticleList data={data} />}
-          {hasNextPage && (
-            <Button
-              variant={"outline"}
-              className="mt-4"
-              onClick={() => fetchNextPage()}
-              disabled={!hasNextPage || isFetchingNextPage}
-            >
-              {isFetchingNextPage ? "Loading more..." : "Load More"}
-            </Button>
+          {data && (
+            <InfiniteArticleList
+              data={data}
+              hasNextPage={hasNextPage}
+              isFetchingNextPage={isFetchingNextPage}
+              onLoadMore={fetchNextPage}
+            />
           )}
         </div>
         <div className="order-first md:order-none md:mt-0">
