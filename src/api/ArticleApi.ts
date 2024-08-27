@@ -75,6 +75,9 @@ export const useCreateArticle = () => {
       queryClient.invalidateQueries({
         queryKey: ["fetch-articles-by-category"],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["fetch-articles-by-user"],
+      });
       toast.success("Article successfully created.");
     },
   });
@@ -116,12 +119,14 @@ type ArticleRequestParams = {
   pageParam: number;
   categoryId?: string;
   searchQuery?: string;
+  userId?: string;
 };
 
 const getArticlesRequest = async ({
   pageParam,
   categoryId,
   searchQuery,
+  userId,
 }: ArticleRequestParams): Promise<ArticleApiResponse> => {
   let url = "";
 
@@ -129,6 +134,8 @@ const getArticlesRequest = async ({
     url = `${ARTICLE_API_BASE_URL}/category/${categoryId}?page=${pageParam}`;
   } else if (searchQuery) {
     url = `${ARTICLE_API_BASE_URL}/search?searchQuery=${searchQuery}&page=${pageParam}`;
+  } else if (userId) {
+    url = `${ARTICLE_API_BASE_URL}/user/${userId}?page=${pageParam}`;
   } else {
     url = `${ARTICLE_API_BASE_URL}?page=${pageParam}`;
   }
@@ -141,7 +148,7 @@ const getArticlesRequest = async ({
   });
 
   if (!response.ok) {
-    throw new Error("Failed to get articles");
+    throw new Error("Failed to get user articles");
   }
 
   return response.json();
@@ -196,6 +203,31 @@ export const useGetArticlesByCategory = (categoryId?: string) => {
   };
 };
 
+export const useGetArticlesByUser = (userId?: string) => {
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
+    useInfiniteQuery({
+      queryKey: ["fetch-articles-by-user", userId],
+      queryFn: ({ pageParam }) => getArticlesRequest({ pageParam, userId }),
+      initialPageParam: 1,
+      getNextPageParam: (lastPage) => {
+        if (lastPage.pagingInfo.page === lastPage.pagingInfo.pages) {
+          return null;
+        }
+        return lastPage.pagingInfo.page + 1;
+      },
+      enabled: !!userId,
+      staleTime: 1000 * 60 * 10, // 10 mins
+    });
+
+  return {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+  };
+};
+
 export const useSearchArticles = (searchQuery?: string) => {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useInfiniteQuery({
@@ -216,35 +248,35 @@ export const useSearchArticles = (searchQuery?: string) => {
   return { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading };
 };
 
-export const useGetUserArticles = (
+export const useGetCurrentUserArticles = (
   articleQueryObj: ArticleQueryObject,
-  userId?: string,
 ) => {
+  const { getAccessTokenSilently } = useAuth0();
   const getUserArticlesRequest = async (): Promise<ArticleApiResponse> => {
+    const accessToken = await getAccessTokenSilently();
     const params = new URLSearchParams();
     params.set("page", articleQueryObj.page.toString());
 
     const response = await fetch(
-      `${ARTICLE_API_BASE_URL}/user/${userId}?${params.toString()}`,
+      `${ARTICLE_API_BASE_URL}/me?${params.toString()}`,
       {
         method: "GET",
         headers: {
-          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
         },
       },
     );
 
     if (!response.ok) {
-      throw new Error("Failed to get user articles");
+      throw new Error("Failed to get current user articles");
     }
 
     return response.json();
   };
 
   const { data, isLoading } = useQuery({
-    queryKey: ["fetch-user-articles", userId, articleQueryObj],
+    queryKey: ["fetch-current-user-articles", articleQueryObj],
     queryFn: getUserArticlesRequest,
-    enabled: !!userId,
     placeholderData: keepPreviousData,
     staleTime: 1000 * 60 * 10, // 10 mins
   });
@@ -324,6 +356,12 @@ export const useUpdateArticle = (articleId: string) => {
         queryKey: ["fetch-single-article", articleId],
       });
       queryClient.invalidateQueries({ queryKey: ["fetch-user-articles"] });
+      queryClient.invalidateQueries({
+        queryKey: ["fetch-articles-by-category"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["fetch-articles-by-user"],
+      });
       toast.success("Article successfully updated.");
     },
   });
@@ -356,6 +394,9 @@ export const useDeleteArticle = () => {
       queryClient.invalidateQueries({ queryKey: ["fetch-user-articles"] });
       queryClient.invalidateQueries({
         queryKey: ["fetch-articles-by-category"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["fetch-articles-by-user"],
       });
       toast.success("Article successfully deleted.");
     },

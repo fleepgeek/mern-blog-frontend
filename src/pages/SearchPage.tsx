@@ -1,9 +1,8 @@
 import { useSearchParams } from "react-router-dom";
 import { useGetAllCategories, useSearchArticles } from "../api/ArticleApi";
-import ArticleList from "../components/InfiniteArticleList";
 import CategoryList from "../components/CategoryList";
-import { Button } from "../components/ui/button";
 import SearchBox from "../components/SearchBox";
+import InfiniteArticleList from "../components/InfiniteArticleList";
 
 export default function SearchPage() {
   const { categories } = useGetAllCategories();
@@ -19,8 +18,6 @@ export default function SearchPage() {
       </div>
     );
   }
-
-  console.log(hasNextPage);
 
   return (
     <div>
@@ -38,16 +35,13 @@ export default function SearchPage() {
             </h1>
           )}
           {isLoading && <p>Loading Articles...</p>}
-          {data && <ArticleList data={data} />}
-          {hasNextPage && (
-            <Button
-              variant={"outline"}
-              className="mt-4"
-              onClick={() => fetchNextPage()}
-              disabled={!hasNextPage || isFetchingNextPage}
-            >
-              {isFetchingNextPage ? "Loading more..." : "Load More"}
-            </Button>
+          {data && (
+            <InfiniteArticleList
+              data={data}
+              hasNextPage={hasNextPage}
+              isFetchingNextPage={isFetchingNextPage}
+              onLoadMore={fetchNextPage}
+            />
           )}
         </div>
         <div className="md:mt-0">

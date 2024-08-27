@@ -1,17 +1,18 @@
 import { format, formatDistance } from "date-fns";
 import { Article } from "../types";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import BookmarkToogle, { BookmarkButton } from "./BookmarkToggle";
 import { Dot } from "lucide-react";
 
 type ArticleItemProps = {
   article: Article;
-  isMini: boolean;
+  isMini?: boolean;
 };
 export default function ArticleItem({ article, isMini }: ArticleItemProps) {
   const { isAuthenticated, loginWithRedirect } = useAuth0();
   const { pathname } = useLocation();
+  const navigate = useNavigate();
 
   return (
     <Link
@@ -35,7 +36,15 @@ export default function ArticleItem({ article, isMini }: ArticleItemProps) {
             <div>
               <h3 className="text-xl">{article.title}</h3>
               <div className="flex items-center text-sm">
-                <span>{article.author.name || "Author"}</span>
+                <span
+                  className="hover:underline"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigate(`/users/${article.author._id}`);
+                  }}
+                >
+                  {article.author.name || "Author"}
+                </span>
                 <Dot />
                 <span className="text-gray-600">
                   {format(new Date(article.createdAt), "MM LLL yy")}
@@ -51,7 +60,27 @@ export default function ArticleItem({ article, isMini }: ArticleItemProps) {
         <div className="flex flex-col gap-2 border-b pb-8">
           <div className="mb-2 flex items-center gap-2">
             <div className="h-6 w-6 rounded-full bg-gray-400"></div>
-            <span>{article.author.name}</span>
+            <div className="flex gap-1 text-sm">
+              <span
+                className="hover:underline"
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigate(`/users/${article.author._id}`);
+                }}
+              >
+                {article.author.name}
+              </span>
+              <span className="text-gray-500">in</span>
+              <span
+                className="hover:underline"
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigate(`/category/${article.category._id}`);
+                }}
+              >
+                {article.category.name}
+              </span>
+            </div>
           </div>
           <div className="grid w-full grid-cols-3 gap-8">
             <div className="col-span-2 flex flex-col">
@@ -80,7 +109,7 @@ export default function ArticleItem({ article, isMini }: ArticleItemProps) {
                 )}
               </div>
             </div>
-            <div className={`h-[120px] w-[120px] bg-gray-400 md:w-[200px]`}>
+            <div className={`h-[120px] bg-gray-400`}>
               {article.coverImageUrl && (
                 <img
                   className="h-full w-full object-cover"
