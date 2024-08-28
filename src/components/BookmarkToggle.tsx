@@ -28,7 +28,7 @@ export default function BookmarkToogle({ articleId }: BookmarkToogleProps) {
 
   return (
     <BookmarkButton
-      isBookmarked={isBookmarked}
+      marked={isBookmarked}
       onToggle={handleToggleBookmark}
       isLoading={isAddingBookmark || isRemovingBookmark}
     />
@@ -36,21 +36,21 @@ export default function BookmarkToogle({ articleId }: BookmarkToogleProps) {
 }
 
 type BookmarkButtonProps = {
-  isBookmarked?: boolean;
+  marked?: boolean;
   onToggle: () => void;
   isLoading?: boolean;
 };
 
 export function BookmarkButton({
-  isBookmarked = false,
+  marked,
   onToggle,
   isLoading,
 }: BookmarkButtonProps) {
-  const [marked, setMarked] = useState(isBookmarked);
+  const [isMarked, setIsMarked] = useState(marked);
 
   useEffect(() => {
-    setMarked(isBookmarked);
-  }, [isBookmarked]);
+    setIsMarked(marked);
+  }, [marked]);
 
   return (
     <Button
@@ -58,13 +58,13 @@ export function BookmarkButton({
       className="p-0 hover:bg-transparent"
       onClick={(e) => {
         e.preventDefault();
-        setMarked((prev) => !prev);
+        setIsMarked((prev) => !prev);
         if (!isLoading) {
           onToggle();
         }
       }}
     >
-      <Bookmark fill={`${marked ? "black" : "transparent"}`} />
+      <Bookmark fill={`${isMarked ? "black" : "transparent"}`} />
     </Button>
   );
 }
