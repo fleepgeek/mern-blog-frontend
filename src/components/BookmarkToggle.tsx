@@ -5,6 +5,7 @@ import {
   useGetCurrentUser,
   useRemoveBookmark,
 } from "../api/UserApi";
+import { useEffect, useState } from "react";
 
 type BookmarkToogleProps = {
   articleId: string;
@@ -45,17 +46,25 @@ export function BookmarkButton({
   onToggle,
   isLoading,
 }: BookmarkButtonProps) {
+  const [marked, setMarked] = useState(isBookmarked);
+
+  useEffect(() => {
+    setMarked(isBookmarked);
+  }, [isBookmarked]);
+
   return (
     <Button
       variant="ghost"
       className="p-0 hover:bg-transparent"
       onClick={(e) => {
         e.preventDefault();
-        onToggle();
+        setMarked((prev) => !prev);
+        if (!isLoading) {
+          onToggle();
+        }
       }}
-      disabled={isLoading}
     >
-      <Bookmark fill={`${isBookmarked ? "black" : "transparent"}`} />
+      <Bookmark fill={`${marked ? "black" : "transparent"}`} />
     </Button>
   );
 }

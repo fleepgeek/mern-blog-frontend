@@ -44,7 +44,7 @@ export default function SearchPage() {
             />
           )}
         </div>
-        <div className="md:mt-0">
+        <div className="mt-8 md:sticky md:top-16 md:mt-0 md:h-[100dvh]">
           <h2 className="mb-4 text-xl font-bold">Browse Categories</h2>
           <CategoryList categories={categories || []} />
         </div>
