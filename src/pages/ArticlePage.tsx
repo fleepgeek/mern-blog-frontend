@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { useGetSingleArticle } from "../api/ArticleApi";
 import { Loader2 } from "lucide-react";
 import CategoryChip from "../components/CategoryChip";
@@ -6,9 +6,14 @@ import { createPortal } from "react-dom";
 import { intlFormat } from "date-fns";
 import { cn } from "../lib/utils";
 import CommentsSheet from "../components/CommentsSheet";
+import BookmarkToogle, { BookmarkButton } from "../components/BookmarkToggle";
+import { useAuth0 } from "@auth0/auth0-react";
 
 export default function ArticlePage() {
   const { id } = useParams();
+  const { isAuthenticated, loginWithRedirect } = useAuth0();
+  const { pathname } = useLocation();
+
   const { article, isLoading } = useGetSingleArticle(id);
 
   if (isLoading) {
@@ -61,18 +66,28 @@ export default function ArticlePage() {
               { locale: "en-US" },
             )}
           </p>
-
-          {id && (
-            // <div className="mt-8">
-            <div>
-              <CommentsSheet articleId={id} />
-            </div>
-          )}
         </div>
       </div>
 
       <div className="mt-8 grid gap-12 md:grid-cols-3">
-        <div className="md:col-span-2">{article.content}</div>
+        <div className="md:col-span-2">
+          <div className="mb-8 flex items-baseline gap-8 border-y py-2">
+            {id && <CommentsSheet articleId={id} />}
+
+            {isAuthenticated ? (
+              <BookmarkToogle articleId={article._id} />
+            ) : (
+              <BookmarkButton
+                onToggle={() =>
+                  loginWithRedirect({ appState: { returnTo: pathname } })
+                }
+              />
+            )}
+          </div>
+
+          <div>{article.content}</div>
+        </div>
+
         <div>
           <h4 className="mb-4 font-bold">Author</h4>
           <div className="flex gap-4">

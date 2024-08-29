@@ -18,6 +18,7 @@ export default function CommentItem({
   onSetCommentToDelete,
 }: CommentItemProps) {
   const { id } = useParams();
+
   const { currentUser } = useGetCurrentUser();
   const { updateComment, isLoading } = useUpdateUserComment(id as string);
 
@@ -96,6 +97,32 @@ export default function CommentItem({
             </PopoverContent>
           </Popover>
         )}
+      </div>
+
+      <p>{comment.content}</p>
+    </div>
+  );
+}
+
+type PublicCommentItemProps = {
+  comment: Comment;
+};
+
+export function PublicCommentItem({ comment }: PublicCommentItemProps) {
+  return (
+    <div className="my-8 flex flex-col gap-4">
+      <div className="flex justify-between">
+        <div className="flex items-center gap-2">
+          <CircleUserRound className="text-gray-500" size={40} />
+          <div className="flex flex-col">
+            <p>{comment.user.name || comment.user.email} </p>
+            <span className="text-sm tracking-tight text-gray-500">
+              {formatDistance(new Date(comment.createdAt), new Date(), {
+                addSuffix: true,
+              })}
+            </span>
+          </div>
+        </div>
       </div>
 
       <p>{comment.content}</p>

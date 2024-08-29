@@ -22,7 +22,7 @@ import CommentDeleteOverlay from "./CommentDeleteOverlay";
 import { useTrackScreenWidth } from "../lib/hooks";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useLocation, useSearchParams } from "react-router-dom";
-import CommentItem from "./CommentItem";
+import CommentItem, { PublicCommentItem } from "./CommentItem";
 
 type CommentsSheetProps = {
   articleId: string;
@@ -127,12 +127,18 @@ export default function CommentsSheet({ articleId }: CommentsSheetProps) {
                 <CommentList
                   comments={comments || []}
                   render={(comment) => (
-                    <CommentItem
-                      comment={comment}
-                      onSetCommentToDelete={handleSetCommentToDelete}
-                    />
+                    <>
+                      {isAuthenticated ? (
+                        <CommentItem
+                          comment={comment}
+                          onSetCommentToDelete={handleSetCommentToDelete}
+                        />
+                      ) : (
+                        <PublicCommentItem comment={comment} />
+                      )}
+                    </>
                   )}
-                ></CommentList>
+                />
               </div>
             )}
           </ScrollArea>
