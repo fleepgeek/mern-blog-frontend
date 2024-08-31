@@ -15,12 +15,15 @@ import LoadingButton from "../components/LoadingButton";
 import ComboBox from "../components/ComboBox";
 import { useEffect } from "react";
 import { Article } from "../types";
+import ImagePicker from "../components/ImagePicker";
+import { useNavigate } from "react-router-dom";
 
 const formSchema = z.object({
   title: z.string().min(1, { message: "Title is required" }),
   category: z.string().min(1, { message: "Category is required" }),
   content: z.string().min(1, { message: "Content is required" }),
-  coverImageUrl: z.string(),
+  imageFile: z.instanceof(File, { message: "image is required" }).optional(),
+  coverImageUrl: z.string().optional(),
 });
 
 export type ArticleFormObject = z.infer<typeof formSchema>;
@@ -30,18 +33,18 @@ type SaveArticleFormProps = {
     label: string;
     value: string;
   }[];
-  onSave: (data: ArticleFormObject) => void;
+  onSave: (data: FormData) => void;
   isLoading: boolean;
-  coverImage: string;
   article?: Article;
+  savedData?: Article;
 };
 
 export default function SaveArticleForm({
   categoryOptions,
   isLoading,
   onSave,
-  coverImage,
   article,
+  savedData,
 }: SaveArticleFormProps) {
   const form = useForm<ArticleFormObject>({
     resolver: zodResolver(formSchema),
@@ -50,26 +53,48 @@ export default function SaveArticleForm({
       category: article?.category._id || "",
       content: article?.content || "",
       coverImageUrl: article?.coverImageUrl || "",
+      imageFile: undefined,
     },
   });
 
-  useEffect(() => {
-    if (coverImage) {
-      form.setValue("coverImageUrl", coverImage);
+  const navigate = useNavigate();
+
+  const onSubmit = async (articleFormObject: ArticleFormObject) => {
+    const formData = new FormData();
+    formData.append("title", articleFormObject.title);
+    formData.append("category", articleFormObject.category);
+    formData.append("content", articleFormObject.content);
+
+    if (articleFormObject.imageFile) {
+      formData.append("imageFile", articleFormObject.imageFile);
     }
-  }, [coverImage, form]);
+
+    onSave(formData);
+  };
+
+  useEffect(() => {
+    if (savedData) {
+      navigate(`/articles/${savedData._id}`);
+    }
+  }, [savedData, navigate]);
+
+  useEffect(() => {
+    form.reset({
+      title: article?.title || "",
+      category: article?.category._id || "",
+      content: article?.content || "",
+      coverImageUrl: article?.coverImageUrl || "",
+      imageFile: undefined,
+    });
+  }, [article, form, savedData]);
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSave)} className="space-y-8">
-        <FormField
-          control={form.control}
-          name="coverImageUrl"
-          render={() => (
-            <FormItem>
-              <FormMessage />
-            </FormItem>
-          )}
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <ImagePicker
+          name="imageFile"
+          imageUrlToWatch="coverImageUrl"
+          isLoading={isLoading}
         />
 
         <FormField

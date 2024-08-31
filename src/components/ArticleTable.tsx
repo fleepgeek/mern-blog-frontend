@@ -54,15 +54,16 @@ export default function ArticleTable({
         {/* <TableCaption>A list of articles written by you.</TableCaption> */}
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[100px]">Number</TableHead>
+            {/* <TableHead className="w-[100px]">Number</TableHead> */}
             <TableHead>Title</TableHead>
             <TableHead className="text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {articles.map((article, index) => (
+          {/* {articles.map((article, index) => ( */}
+          {articles.map((article) => (
             <TableRow key={article._id}>
-              <TableCell className="font-medium">{index + 1}</TableCell>
+              {/* <TableCell className="font-medium">{index + 1}</TableCell> */}
               <TableCell>{article.title}</TableCell>
               <TableCell className="text-right">
                 <div className="flex justify-end gap-2">

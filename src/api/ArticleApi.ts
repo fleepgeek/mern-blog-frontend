@@ -12,7 +12,6 @@ import {
   Category,
 } from "../types";
 import { useAuth0 } from "@auth0/auth0-react";
-import { ArticleFormObject } from "../forms/SaveArticleForm";
 import { toast } from "sonner";
 
 const ARTICLE_API_BASE_URL =
@@ -41,7 +40,7 @@ export const useGetAllCategories = () => {
 export const useCreateArticle = () => {
   const { getAccessTokenSilently } = useAuth0();
   const createArticleRequest = async (
-    articleData: ArticleFormObject,
+    articleFormData: FormData,
   ): Promise<Article> => {
     const accessToken = await getAccessTokenSilently();
 
@@ -49,9 +48,8 @@ export const useCreateArticle = () => {
       method: "POST",
       headers: {
         Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
       },
-      body: JSON.stringify(articleData),
+      body: articleFormData,
     });
 
     if (!response.ok) {
@@ -67,6 +65,7 @@ export const useCreateArticle = () => {
     mutate: createArticle,
     data,
     isPending: isLoading,
+    reset,
   } = useMutation({
     mutationFn: createArticleRequest,
     onSuccess: () => {
@@ -76,13 +75,13 @@ export const useCreateArticle = () => {
         queryKey: ["fetch-articles-by-category"],
       });
       queryClient.invalidateQueries({
-        queryKey: ["fetch-articles-by-user"],
+        queryKey: ["fetch-current-user-articles"],
       });
       toast.success("Article successfully created.");
     },
   });
 
-  return { createArticle, isLoading, data };
+  return { createArticle, isLoading, data, reset };
 };
 
 export const useUploadImage = () => {
@@ -322,7 +321,7 @@ export const useGetSingleArticle = (articleId?: string) => {
 export const useUpdateArticle = (articleId: string) => {
   const { getAccessTokenSilently } = useAuth0();
   const updateArticleRequest = async (
-    articleData: ArticleFormObject,
+    articleFormData: FormData,
   ): Promise<Article> => {
     const accessToken = await getAccessTokenSilently();
 
@@ -330,9 +329,8 @@ export const useUpdateArticle = (articleId: string) => {
       method: "PUT",
       headers: {
         Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
       },
-      body: JSON.stringify(articleData),
+      body: articleFormData,
     });
 
     if (!response.ok) {
@@ -346,7 +344,11 @@ export const useUpdateArticle = (articleId: string) => {
 
   const queryClient = useQueryClient();
 
-  const { mutate: updateArticle, isPending: isLoading } = useMutation({
+  const {
+    mutate: updateArticle,
+    isPending: isLoading,
+    data,
+  } = useMutation({
     mutationFn: updateArticleRequest,
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -360,13 +362,13 @@ export const useUpdateArticle = (articleId: string) => {
         queryKey: ["fetch-articles-by-category"],
       });
       queryClient.invalidateQueries({
-        queryKey: ["fetch-articles-by-user"],
+        queryKey: ["fetch-current-user-articles"],
       });
       toast.success("Article successfully updated.");
     },
   });
 
-  return { updateArticle, isLoading };
+  return { updateArticle, isLoading, data };
 };
 
 export const useDeleteArticle = () => {
@@ -396,7 +398,7 @@ export const useDeleteArticle = () => {
         queryKey: ["fetch-articles-by-category"],
       });
       queryClient.invalidateQueries({
-        queryKey: ["fetch-articles-by-user"],
+        queryKey: ["fetch-current-user-articles"],
       });
       toast.success("Article successfully deleted.");
     },
