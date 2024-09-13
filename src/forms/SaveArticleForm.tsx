@@ -10,18 +10,18 @@ import {
   FormMessage,
 } from "../components/ui/form";
 import { Input } from "../components/ui/input";
-import { Textarea } from "../components/ui/textarea";
 import LoadingButton from "../components/LoadingButton";
 import ComboBox from "../components/ComboBox";
 import { useEffect } from "react";
 import { Article } from "../types";
 import ImagePicker from "../components/ImagePicker";
 import { useNavigate } from "react-router-dom";
+import Editor from "../components/Editor";
 
 const formSchema = z.object({
   title: z.string().min(1, { message: "Title is required" }),
   category: z.string().min(1, { message: "Category is required" }),
-  content: z.string().min(1, { message: "Content is required" }),
+  content: z.string().min(8, { message: "Content is required" }),
   imageFile: z.instanceof(File, { message: "image is required" }).optional(),
   coverImageUrl: z.string().optional(),
 });
@@ -135,7 +135,14 @@ export default function SaveArticleForm({
             <FormItem>
               <FormLabel>Content</FormLabel>
               <FormControl>
-                <Textarea {...field} />
+                {/* <Textarea {...field} /> */}
+
+                <Editor
+                  // {...field}
+                  content={field.value}
+                  onChange={field.onChange}
+                  // onChange={onEditorContentStateChange}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
