@@ -18,7 +18,7 @@ export default function CommentDeleteOverlay({
   }
 
   return (
-    <div className="absolute left-0 top-0 z-50 flex h-full w-full items-center justify-center rounded-t-3xl bg-white/90 md:rounded-none">
+    <section className="absolute left-0 top-0 z-50 flex h-full w-full items-center justify-center rounded-t-3xl bg-white/90 md:rounded-none">
       <div className="flex flex-col gap-2 text-center">
         <h2 className="text-3xl tracking-tight">Delete</h2>
         <span className="*:text-sm">
@@ -46,6 +46,6 @@ export default function CommentDeleteOverlay({
           </Button>
         </div>
       </div>
-    </div>
+    </section>
   );
 }

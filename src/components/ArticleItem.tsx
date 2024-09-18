@@ -22,7 +22,7 @@ export default function ArticleItem({ article, isMini }: ArticleItemProps) {
       }}
     >
       {isMini ? (
-        <div className="flex items-center justify-between">
+        <article className="flex items-center justify-between">
           <div className="flex gap-4">
             <div className="mt-1 h-8 w-8 rounded-full bg-gray-400">
               {article.coverImageUrl && (
@@ -55,9 +55,9 @@ export default function ArticleItem({ article, isMini }: ArticleItemProps) {
             </div>
           </div>
           <BookmarkToogle articleId={article._id} />
-        </div>
+        </article>
       ) : (
-        <div className="flex flex-col gap-2 border-b pb-8">
+        <article className="flex flex-col gap-2 border-b pb-8">
           <div className="mb-2 flex items-center gap-2">
             <div className="h-6 w-6 rounded-full bg-gray-400"></div>
             <div className="flex gap-1 text-sm">
@@ -119,7 +119,7 @@ export default function ArticleItem({ article, isMini }: ArticleItemProps) {
               )}
             </div>
           </div>
-        </div>
+        </article>
       )}
     </Link>
   );

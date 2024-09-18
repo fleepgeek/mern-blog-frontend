@@ -43,10 +43,10 @@ export default function ArticlesByCategoryPage() {
             />
           )}
         </div>
-        <div className="sticky top-0 border-b bg-white pb-4 pt-2 md:top-16 md:h-[100dvh] md:border-b-0 md:pt-0">
+        <aside className="sticky top-0 border-b bg-white pb-4 pt-2 md:top-16 md:h-[100dvh] md:border-b-0 md:pt-0">
           <h2 className="mb-4 text-xl font-bold">Browse Categories</h2>
           <CategoryList categories={categories || []} />
-        </div>
+        </aside>
       </div>
     </>
   );

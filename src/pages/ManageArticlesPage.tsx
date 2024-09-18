@@ -43,12 +43,12 @@ export default function ManageArticlesPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <div>
+      <section>
         <h2 className="text-2xl font-bold">Manage Articles</h2>
         <p className="text-[0.8rem] text-muted-foreground">
           Edit and Delete your articles
         </p>
-      </div>
+      </section>
 
       <ArticleTable
         articles={articles}

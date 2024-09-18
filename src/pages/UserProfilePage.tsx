@@ -21,7 +21,7 @@ export default function UserProfilePage() {
 
   return (
     <div className="flex flex-col-reverse gap-16 md:grid md:grid-cols-3 md:gap-8">
-      <div className="md:col-span-2">
+      <section className="md:col-span-2">
         <h1 className="mb-16 hidden text-3xl font-bold md:block">
           {user.name}
         </h1>
@@ -34,11 +34,11 @@ export default function UserProfilePage() {
             onLoadMore={fetchNextPage}
           />
         )}
-      </div>
+      </section>
 
-      <div className="md:sticky md:top-16 md:h-[100dvh] md:border-l md:pl-8">
+      <aside className="md:sticky md:top-16 md:h-[100dvh] md:border-l md:pl-8">
         <UserProfileInfo user={user} />
-      </div>
+      </aside>
     </div>
   );
 }

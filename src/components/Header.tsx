@@ -11,22 +11,22 @@ import {
 } from "./ui/dropdown-menu";
 import { CircleUserRound, Search } from "lucide-react";
 import NewArticleButton from "./NewArticleButton";
-import SearchBox from "./SearchBox";
+import SearchForm from "../forms/SearchForm";
 
-export default function Navbar() {
+export default function Header() {
   const { isAuthenticated, loginWithRedirect, logout, user } = useAuth0();
   const [searchParams] = useSearchParams();
   const searchQuery = searchParams.get("q") || "";
 
   return (
-    <div className="border border-b-gray-400 bg-white">
+    <header className="border border-b-gray-400 bg-white">
       <div className="container flex min-h-16 items-center justify-between">
         <div className="flex gap-6">
           <Link to={"/"} className="text-2xl font-bold">
             MERN Blog
           </Link>
           <div className="hidden md:block">
-            <SearchBox searchQuery={searchQuery} />
+            <SearchForm searchQuery={searchQuery} />
           </div>
         </div>
         <nav className="flex items-center gap-6 md:gap-8">
@@ -74,6 +74,6 @@ export default function Navbar() {
           )}
         </nav>
       </div>
-    </div>
+    </header>
   );
 }

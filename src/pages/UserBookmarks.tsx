@@ -11,14 +11,14 @@ export default function UserBookmarks() {
 
   return (
     <div className="space-y-8">
-      <div>
+      <section>
         <h2 className="text-2xl font-bold">Your Bookmarks</h2>
         <p className="text-[0.8rem] text-muted-foreground">
           Manage your bookmarks
         </p>
-      </div>
+      </section>
 
-      <div className="grid lg:grid-cols-4">
+      <section className="grid lg:grid-cols-4">
         <ul className="flex flex-col gap-8 lg:col-span-2">
           {articles?.map((article) => (
             <li key={article._id}>
@@ -26,7 +26,7 @@ export default function UserBookmarks() {
             </li>
           ))}
         </ul>
-      </div>
+      </section>
     </div>
   );
 }

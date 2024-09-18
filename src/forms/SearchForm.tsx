@@ -1,9 +1,9 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Form, FormControl, FormField, FormItem } from "./ui/form";
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
+import { Form, FormControl, FormField, FormItem } from "../components/ui/form";
+import { Input } from "../components/ui/input";
+import { Button } from "../components/ui/button";
 import { Search } from "lucide-react";
 import { cn } from "../lib/utils";
 import { useNavigate } from "react-router-dom";
@@ -15,10 +15,10 @@ const formSchema = z.object({
 
 type SearchData = z.infer<typeof formSchema>;
 
-type SearchBoxProps = {
+type SearchFormProps = {
   searchQuery?: string;
 };
-export default function SearchBox({ searchQuery }: SearchBoxProps) {
+export default function SearchForm({ searchQuery }: SearchFormProps) {
   const form = useForm<SearchData>({
     resolver: zodResolver(formSchema),
     defaultValues: {

@@ -17,18 +17,18 @@ export default function HomePage() {
 
   return (
     <div className="grid-cols-3 gap-16 md:grid">
-      <div className="col-span-2">
+      <section className="col-span-2">
         <InfiniteArticleList
           data={data}
           hasNextPage={hasNextPage}
           isFetchingNextPage={isFetchingNextPage}
           onLoadMore={fetchNextPage}
         />
-      </div>
-      <div className="mt-8 md:sticky md:top-16 md:mt-0 md:h-[100dvh]">
+      </section>
+      <aside className="mt-8 md:sticky md:top-16 md:mt-0 md:h-[100dvh]">
         <h2 className="mb-4 text-xl font-bold">Browse Categories</h2>
         <CategoryList categories={categories || []} />
-      </div>
+      </aside>
     </div>
   );
 }

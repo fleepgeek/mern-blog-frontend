@@ -64,7 +64,7 @@ export default function CommentsSheet({ articleId }: CommentsSheetProps) {
   };
 
   return (
-    <div>
+    <section>
       <Sheet
         onOpenChange={() => {
           setIsCommentsSheetOpen((prev) => !prev);
@@ -144,6 +144,6 @@ export default function CommentsSheet({ articleId }: CommentsSheetProps) {
           </ScrollArea>
         </SheetContent>
       </Sheet>
-    </div>
+    </section>
   );
 }

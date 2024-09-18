@@ -47,7 +47,7 @@ export default function CommentItem({
   }
 
   return (
-    <div className="my-8 flex flex-col gap-4">
+    <section className="my-8 flex flex-col gap-4">
       <div className="flex justify-between">
         <div className="flex items-center gap-2">
           <CircleUserRound className="text-gray-500" size={40} />
@@ -100,7 +100,7 @@ export default function CommentItem({
       </div>
 
       <p>{comment.content}</p>
-    </div>
+    </section>
   );
 }
 
@@ -110,7 +110,7 @@ type PublicCommentItemProps = {
 
 export function PublicCommentItem({ comment }: PublicCommentItemProps) {
   return (
-    <div className="my-8 flex flex-col gap-4">
+    <section className="my-8 flex flex-col gap-4">
       <div className="flex justify-between">
         <div className="flex items-center gap-2">
           <CircleUserRound className="text-gray-500" size={40} />
@@ -126,6 +126,6 @@ export function PublicCommentItem({ comment }: PublicCommentItemProps) {
       </div>
 
       <p>{comment.content}</p>
-    </div>
+    </section>
   );
 }

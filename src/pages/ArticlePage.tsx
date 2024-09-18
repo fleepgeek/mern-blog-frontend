@@ -33,7 +33,7 @@ export default function ArticlePage() {
   }
 
   return (
-    <>
+    <article>
       {article.coverImageUrl &&
         createPortal(
           <div className="absolute left-0 top-0 -z-10 h-[500px] w-full bg-gray-400"></div>,
@@ -99,6 +99,6 @@ export default function ArticlePage() {
           </div>
         </div>
       </div>
-    </>
+    </article>
   );
 }

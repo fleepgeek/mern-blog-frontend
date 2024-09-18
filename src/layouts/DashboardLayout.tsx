@@ -1,5 +1,5 @@
 import { NavLink, Outlet } from "react-router-dom";
-import Navbar from "../components/Navbar";
+import Header from "../components/Header";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Separator } from "../components/ui/separator";
 import { cn } from "../lib/utils";
@@ -13,10 +13,10 @@ export default function DashboardLayout() {
   const { user } = useAuth0();
   return (
     <>
-      <Navbar />
+      <Header />
 
       <div className="container gap-16 py-10 md:grid lg:grid-cols-4">
-        <div className="mb-16 self-start rounded-lg border border-black p-2 text-sm md:min-h-[250px]">
+        <aside className="mb-16 self-start rounded-lg border border-black p-2 text-sm md:min-h-[250px]">
           <div className="px-2 font-light">
             <p>{user?.name}</p>
             <p className="line-clamp-1">{user?.email}</p>
@@ -45,11 +45,11 @@ export default function DashboardLayout() {
               </li>
             ))}
           </ul>
-        </div>
+        </aside>
 
-        <div className="col-span-2 md:col-start-2">
+        <main className="col-span-2 md:col-start-2">
           <Outlet />
-        </div>
+        </main>
       </div>
     </>
   );

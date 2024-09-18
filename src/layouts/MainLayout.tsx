@@ -1,4 +1,4 @@
-import Navbar from "../components/Navbar";
+import Header from "../components/Header";
 
 type MainLayoutProps = {
   children: React.ReactNode;
@@ -7,8 +7,8 @@ type MainLayoutProps = {
 export default function MainLayout({ children }: MainLayoutProps) {
   return (
     <>
-      <Navbar />
-      <div className="container py-10">{children}</div>
+      <Header />
+      <main className="container py-10">{children}</main>
     </>
   );
 }
