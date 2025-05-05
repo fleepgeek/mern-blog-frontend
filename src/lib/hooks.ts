@@ -1,13 +1,11 @@
 import { useEffect, useState } from "react";
 
 export const useTrackScreenWidth = () => {
-  const [screenWidth, setDeviceWidth] = useState<number>(
-    () => window.innerWidth,
-  );
+  const [screenWidth, setScreenWidth] = useState(() => window.innerWidth);
 
   useEffect(() => {
     const handleResize = () => {
-      setDeviceWidth(window.innerWidth);
+      setScreenWidth(window.innerWidth);
     };
 
     window.addEventListener("resize", handleResize);
@@ -15,7 +13,7 @@ export const useTrackScreenWidth = () => {
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [screenWidth]);
+  }, []);
 
-  return { screenWidth };
+  return screenWidth;
 };

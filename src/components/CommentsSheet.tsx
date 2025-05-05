@@ -47,7 +47,7 @@ export default function CommentsSheet({ articleId }: CommentsSheetProps) {
     reset,
   } = useDeleteUserComment(articleId);
 
-  const { screenWidth } = useTrackScreenWidth();
+  const screenWidth = useTrackScreenWidth();
 
   const [commentToDelete, setCommentToDelete] = useState("");
 

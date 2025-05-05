@@ -147,7 +147,7 @@ const getArticlesRequest = async ({
   });
 
   if (!response.ok) {
-    throw new Error("Failed to get user articles");
+    throw new Error("Failed to get articles");
   }
 
   return response.json();

@@ -1,4 +1,10 @@
-import { EditorProvider, useCurrentEditor } from "@tiptap/react";
+import {
+  type Editor as EditorType,
+  EditorContent,
+  EditorProvider,
+  useCurrentEditor,
+  useEditor,
+} from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { Toggle } from "./ui/toggle";
 import {
@@ -14,7 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-import { memo, useState } from "react";
+import React, { memo, useEffect, useLayoutEffect, useState } from "react";
 
 const extensions = [
   StarterKit.configure({
@@ -50,30 +56,79 @@ const extensions = [
 type EditorProps = {
   content: string;
   onChange: (value: string) => void;
+  // pathname: string;
 };
 
-export default function Editor({ content, onChange }: EditorProps) {
-  return (
-    <EditorProvider
-      extensions={extensions}
-      content={content}
-      onUpdate={({ editor }) => {
+// export default function Editor({ content, onChange }: EditorProps) {
+const Editor = React.forwardRef<HTMLDivElement, EditorProps>(
+  ({ content, onChange, ...props }, forwardedRef) => {
+    const editor = useEditor({
+      extensions,
+      content,
+      // onCreate: ({ editor }) => {
+      //   editor.commands.setContent(content);
+      // },
+      onUpdate: ({ editor }) => {
         onChange(editor.getHTML());
-      }}
-      editorProps={{
+      },
+      // onCreate: ({ editor }) => {
+      //   editor.commands.clearContent(true);
+      // },
+      editorProps: {
         attributes: {
           class:
             "editor min-h-[150px] rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50",
         },
-      }}
-      slotBefore={<Toolbar />}
-    ></EditorProvider>
-  );
-}
+      },
+    });
 
-function Toolbar() {
-  const { editor } = useCurrentEditor();
+    // useLayoutEffect(() => {
+    //   editor?.commands.clearContent();
+    // }, [editor?.commands]);
 
+    // useEffect(() => {
+    //   // editor?.commands.clearContent()
+    //   if (content) {
+    //     editor?.commands.clearContent();
+    //   }
+    // }, [content, editor?.commands]);
+
+    return (
+      <>
+        <Toolbar editor={editor} />
+        <EditorContent ref={forwardedRef} editor={editor} {...props} />
+      </>
+    );
+    // return (
+    //   <EditorProvider
+    //     extensions={extensions}
+    //     content={content}
+    //     onUpdate={({ editor }) => {
+    //       onChange(editor.getHTML());
+    //     }}
+    //     editorProps={{
+    //       attributes: {
+    //         class:
+    //           "editor min-h-[150px] rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50",
+    //       },
+    //     }}
+    //     slotBefore={<Toolbar />}
+    //   ></EditorProvider>
+    // );
+  },
+);
+// }
+
+export default Editor;
+
+// function Toolbar() {
+//   const { editor } = useCurrentEditor();
+
+type ToolbarProps = {
+  editor: EditorType | null;
+};
+
+function Toolbar({ editor }: ToolbarProps) {
   const toobarItems = [
     {
       name: "bold",
@@ -113,7 +168,10 @@ function Toolbar() {
 
   return (
     <div className="flex flex-wrap gap-1 rounded-md border border-input">
-      <HeadingGroup isParagraph={editor.isActive("paragraph")} />
+      <HeadingGroup
+        editor={editor}
+        isParagraph={editor.isActive("paragraph")}
+      />
       {toobarItems.map((item) => (
         <Toggle
           key={item.name}
@@ -131,13 +189,15 @@ function Toolbar() {
 type Level = 1 | 2 | 3;
 
 type HeadingGroupProps = {
+  editor: EditorType | null;
   isParagraph: boolean;
 };
 
 const HeadingGroup = memo(function HeadingGroup({
+  editor,
   isParagraph,
 }: HeadingGroupProps) {
-  const { editor } = useCurrentEditor();
+  // const { editor } = useCurrentEditor();
   const [selectedValue, setSelectedValue] = useState("paragraph");
 
   const handleValueChange = (value: string) => {

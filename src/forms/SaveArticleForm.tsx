@@ -15,8 +15,9 @@ import ComboBox from "../components/ComboBox";
 import { useEffect } from "react";
 import { Article } from "../types";
 import ImagePicker from "../components/ImagePicker";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Editor from "../components/Editor";
+// import { Textarea } from "../components/ui/textarea";
 
 const formSchema = z.object({
   title: z.string().min(1, { message: "Title is required" }),
@@ -58,19 +59,7 @@ export default function SaveArticleForm({
   });
 
   const navigate = useNavigate();
-
-  const onSubmit = async (articleFormObject: ArticleFormObject) => {
-    const formData = new FormData();
-    formData.append("title", articleFormObject.title);
-    formData.append("category", articleFormObject.category);
-    formData.append("content", articleFormObject.content);
-
-    if (articleFormObject.imageFile) {
-      formData.append("imageFile", articleFormObject.imageFile);
-    }
-
-    onSave(formData);
-  };
+  const { pathname } = useLocation();
 
   useEffect(() => {
     if (savedData) {
@@ -88,10 +77,24 @@ export default function SaveArticleForm({
     });
   }, [article, form, savedData]);
 
+  const onSubmit = async (articleFormObject: ArticleFormObject) => {
+    const formData = new FormData();
+    formData.append("title", articleFormObject.title);
+    formData.append("category", articleFormObject.category);
+    formData.append("content", articleFormObject.content);
+
+    if (articleFormObject.imageFile) {
+      formData.append("imageFile", articleFormObject.imageFile);
+    }
+
+    onSave(formData);
+  };
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <ImagePicker
+          key={pathname}
           name="imageFile"
           imageUrlToWatch="coverImageUrl"
           isLoading={isLoading}
@@ -138,9 +141,11 @@ export default function SaveArticleForm({
                 {/* <Textarea {...field} /> */}
 
                 <Editor
-                  // {...field}
+                  // key={pathname + "w"}
+                  {...field}
                   content={field.value}
                   onChange={field.onChange}
+                  // pathname={pathname}
                   // onChange={onEditorContentStateChange}
                 />
               </FormControl>
