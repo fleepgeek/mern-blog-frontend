@@ -119,11 +119,13 @@ export default function ArticleTable({
         </TableBody>
       </Table>
 
-      <PaginationControl
-        page={pagingInfo.page}
-        pages={pagingInfo.pages}
-        onPageChange={setPage}
-      />
+      {pagingInfo.total > articles.length && (
+        <PaginationControl
+          page={pagingInfo.page}
+          pages={pagingInfo.pages}
+          onPageChange={setPage}
+        />
+      )}
     </div>
   );
 }

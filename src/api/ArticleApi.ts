@@ -255,9 +255,10 @@ export const useGetCurrentUserArticles = (
     const accessToken = await getAccessTokenSilently();
     const params = new URLSearchParams();
     params.set("page", articleQueryObj.page.toString());
+    const pageSize = 10;
 
     const response = await fetch(
-      `${ARTICLE_API_BASE_URL}/me?${params.toString()}`,
+      `${ARTICLE_API_BASE_URL}/me?${params.toString()}&pageSize=${pageSize}`,
       {
         method: "GET",
         headers: {
