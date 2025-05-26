@@ -41,6 +41,7 @@ export type ArticleApiResponse = {
 
 export type ArticleQueryObject = {
   page: number;
+  searchQuery: string;
 };
 
 export type Comment = {

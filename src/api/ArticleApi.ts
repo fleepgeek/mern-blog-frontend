@@ -255,6 +255,7 @@ export const useGetCurrentUserArticles = (
     const accessToken = await getAccessTokenSilently();
     const params = new URLSearchParams();
     params.set("page", articleQueryObj.page.toString());
+    params.set("title", articleQueryObj.searchQuery.toString());
     const pageSize = 10;
 
     const response = await fetch(

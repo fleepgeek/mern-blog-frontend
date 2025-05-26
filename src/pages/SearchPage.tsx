@@ -1,7 +1,7 @@
 import { useSearchParams } from "react-router-dom";
 import { useGetAllCategories, useSearchArticles } from "../api/ArticleApi";
 import CategoryList from "../components/CategoryList";
-import SearchBox from "../forms/SearchForm";
+import SearchForm from "../forms/SearchForm";
 import InfiniteArticleList from "../components/InfiniteArticleList";
 
 export default function SearchPage() {
@@ -14,7 +14,7 @@ export default function SearchPage() {
   if (searchQuery === "") {
     return (
       <div className="md:hidden">
-        <SearchBox />
+        <SearchForm />
       </div>
     );
   }
@@ -22,7 +22,7 @@ export default function SearchPage() {
   return (
     <div className="flex grid-cols-3 flex-col gap-16 md:grid">
       <div className="md:hidden">
-        <SearchBox searchQuery={searchQuery} />
+        <SearchForm searchQuery={searchQuery} />
       </div>
       <section className="col-span-2">
         {!isLoading && (

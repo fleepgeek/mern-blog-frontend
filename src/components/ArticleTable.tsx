@@ -4,7 +4,7 @@ import { Button, buttonVariants } from "../components/ui/button";
 import {
   Table,
   TableBody,
-  // TableCaption,
+  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -31,12 +31,14 @@ type ArticleTableProps = {
   articles: Article[];
   pagingInfo: PagingInfo;
   setPage: (page: number) => void;
+  children?: React.ReactNode;
 };
 
 export default function ArticleTable({
   articles,
   pagingInfo,
   setPage,
+  children,
 }: ArticleTableProps) {
   const [deletingItem, setDeletingItem] = useState<string | null>();
   const { onDelete, isLoading } = useDeleteArticle();
@@ -50,20 +52,18 @@ export default function ArticleTable({
 
   return (
     <div className="flex flex-col gap-6">
+      <div className="flex items-center justify-between">{children}</div>
       <Table>
-        {/* <TableCaption>A list of articles written by you.</TableCaption> */}
+        <TableCaption>A list of articles written by you.</TableCaption>
         <TableHeader>
           <TableRow>
-            {/* <TableHead className="w-[100px]">Number</TableHead> */}
             <TableHead>Title</TableHead>
             <TableHead className="text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {/* {articles.map((article, index) => ( */}
           {articles.map((article) => (
             <TableRow key={article._id}>
-              {/* <TableCell className="font-medium">{index + 1}</TableCell> */}
               <TableCell>{article.title}</TableCell>
               <TableCell className="text-right">
                 <div className="flex justify-end gap-2">
