@@ -6,13 +6,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 type DataTableSearchBoxProps = {
   // form: UseFormReturn<{ searchQuery: string }>;
-  handleSearch: (data: SearchData) => void;
-  handleReset: () => void;
+  onSearch: (data: SearchData) => void;
+  onReset: () => void;
 };
 
 export default function DataTableSearchBox({
-  handleSearch,
-  handleReset,
+  onSearch,
+  onReset,
 }: DataTableSearchBoxProps) {
   const form = useForm<SearchData>({
     resolver: zodResolver(searchFormSchema),
@@ -22,15 +22,13 @@ export default function DataTableSearchBox({
   });
 
   return (
-    <div>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleSearch)}>
-          <SearchInput
-            placeholderText="Search for an article"
-            onReset={handleReset}
-          />
-        </form>
-      </Form>
-    </div>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSearch)}>
+        <SearchInput
+          placeholderText="Search for an article"
+          onReset={onReset}
+        />
+      </form>
+    </Form>
   );
 }

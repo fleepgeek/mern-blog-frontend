@@ -6,12 +6,15 @@ import ArticleTable from "../components/ArticleTable";
 import { ArticleQueryObject } from "../types";
 import { SearchData } from "../lib/validations";
 import DataTableSearchBox from "../components/DataTableSearchBox";
+import DataTableToolbar from "../components/DataTableToolbar";
+import DataTableSortOption from "../components/DataTableSortOption";
 
 export default function ManageArticlesPage() {
   const [searchParams, setSearchParams] = useSearchParams({ page: "1" });
   const queryObject: ArticleQueryObject = {
     page: parseInt(searchParams.get("page") as string),
     searchQuery: searchParams.get("title") || "",
+    sortBy: searchParams.get("sortBy") || "newest", // Default to newest
   };
   const { data, isLoading } = useGetCurrentUserArticles(queryObject);
 
@@ -32,6 +35,14 @@ export default function ManageArticlesPage() {
 
   const handleReset = () => {
     setSearchParams();
+  };
+
+  const handleSortChange = (value: string) => {
+    setSearchParams((prevSearchParams) => {
+      prevSearchParams.set("sortBy", value);
+      prevSearchParams.set("page", "1");
+      return prevSearchParams;
+    });
   };
 
   if (isLoading) {
@@ -74,10 +85,13 @@ export default function ManageArticlesPage() {
         pagingInfo={pagingInfo}
         setPage={setPage}
       >
-        <DataTableSearchBox
-          handleSearch={handleSearch}
-          handleReset={handleReset}
-        />
+        <DataTableToolbar>
+          <DataTableSearchBox onSearch={handleSearch} onReset={handleReset} />
+          <DataTableSortOption
+            sortBy={queryObject.sortBy}
+            onChange={handleSortChange}
+          />
+        </DataTableToolbar>
       </ArticleTable>
     </div>
   );

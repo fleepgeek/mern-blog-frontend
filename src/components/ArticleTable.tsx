@@ -26,12 +26,13 @@ import {
 } from "./ui/alert-dialog";
 import LoadingButton from "./LoadingButton";
 import { useEffect, useState } from "react";
+import DataTableToolbar from "./DataTableToolbar";
 
 type ArticleTableProps = {
   articles: Article[];
   pagingInfo: PagingInfo;
   setPage: (page: number) => void;
-  children?: React.ReactNode;
+  children?: React.ReactElement<typeof DataTableToolbar>;
 };
 
 export default function ArticleTable({
@@ -50,9 +51,13 @@ export default function ArticleTable({
     }
   }, [articles, pagingInfo.total, setPage]);
 
+  if (children && children.type !== DataTableToolbar) {
+    throw new Error("Only DataTableToolbar is allowed as a child.");
+  }
+
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex items-center justify-between">{children}</div>
+      <>{children}</>
       <Table>
         <TableCaption>A list of articles written by you.</TableCaption>
         <TableHeader>
