@@ -3,5 +3,9 @@ type DataTableToolbarProps = {
 };
 
 export default function DataTableToolbar({ children }: DataTableToolbarProps) {
-  return <div className="flex items-center justify-between">{children}</div>;
+  return (
+    <div className="items-center justify-between space-y-4 md:flex md:space-y-0">
+      {children}
+    </div>
+  );
 }

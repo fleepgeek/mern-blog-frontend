@@ -41,7 +41,8 @@ export default function SearchInput({
       >
         <Search />
       </Button>
-      <div className="w-[200px]">
+      {/* <div className="w-[200px]"> */}
+      <div className="w-full">
         <FormField
           name="searchQuery"
           control={control}
@@ -61,7 +62,7 @@ export default function SearchInput({
       <Button
         type="button"
         variant="outline"
-        className="self-end rounded-full border-none bg-transparent shadow-none hover:bg-transparent"
+        className="self-end rounded-full border-none bg-transparent pr-4 shadow-none hover:bg-transparent"
         size="icon"
         onClick={handleReset}
       >

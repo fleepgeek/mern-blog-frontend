@@ -1,3 +1,4 @@
+import { SortOption } from "../types";
 import {
   Select,
   SelectContent,
@@ -8,15 +9,12 @@ import {
 
 type DataTableSortOptionProps = {
   sortBy?: string;
+  sortOptions: SortOption[];
   onChange: (value: string) => void;
 };
 
-const SORT_OPTIONS = [
-  { label: "Newest", value: "newest" },
-  { label: "Oldest", value: "oldest" },
-];
-
 export default function DataTableSortOption({
+  sortOptions,
   sortBy,
   onChange,
 }: DataTableSortOptionProps) {
@@ -26,7 +24,7 @@ export default function DataTableSortOption({
         <SelectValue placeholder="Sort by" />
       </SelectTrigger>
       <SelectContent>
-        {SORT_OPTIONS.map((option) => (
+        {sortOptions.map((option) => (
           <SelectItem key={option.value} value={option.value}>
             {option.label}
           </SelectItem>

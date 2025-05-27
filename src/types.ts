@@ -43,6 +43,17 @@ export type ArticleQueryObject = {
   page: number;
   searchQuery: string;
   sortBy: string;
+  filterByCategory: string;
+};
+
+export type SortOption = {
+  label: string;
+  value: string;
+};
+
+export type FilterOption = {
+  label: string;
+  value: string;
 };
 
 export type Comment = {

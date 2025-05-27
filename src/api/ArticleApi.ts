@@ -257,6 +257,7 @@ export const useGetCurrentUserArticles = (
     params.set("page", articleQueryObj.page.toString());
     params.set("title", articleQueryObj.searchQuery.toString());
     params.set("sortBy", articleQueryObj.sortBy.toString());
+    params.set("filterByCategory", articleQueryObj.filterByCategory.toString());
     const pageSize = 10;
 
     const response = await fetch(
