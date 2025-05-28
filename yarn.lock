@@ -1964,6 +1964,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tiptap/extension-heading@npm:^2.12.0":
+  version: 2.12.0
+  resolution: "@tiptap/extension-heading@npm:2.12.0"
+  peerDependencies:
+    "@tiptap/core": ^2.7.0
+  checksum: 10c0/5cbebfb75def9eca54fc008f1855855b62aa9aa7d97e4ca7c53aabbeb82930d04289b92d8a01414090ae0c59a68a61f4f7eea4632cf4147239ab63eb47f350e6
+  languageName: node
+  linkType: hard
+
 "@tiptap/extension-heading@npm:^2.6.6":
   version: 2.6.6
   resolution: "@tiptap/extension-heading@npm:2.6.6"
@@ -2198,6 +2207,13 @@ __metadata:
     "@types/prop-types": "npm:*"
     csstype: "npm:^3.0.2"
   checksum: 10c0/fe455f805c5da13b89964c3d68060cebd43e73ec15001a68b34634604a78140e6fc202f3f61679b9d809dde6d7a7c2cb3ed51e0fd1462557911db09879b55114
+  languageName: node
+  linkType: hard
+
+"@types/trusted-types@npm:^2.0.7":
+  version: 2.0.7
+  resolution: "@types/trusted-types@npm:2.0.7"
+  checksum: 10c0/4c4855f10de7c6c135e0d32ce462419d8abbbc33713b31d294596c0cc34ae1fa6112a2f9da729c8f7a20707782b0d69da3b1f8df6645b0366d08825ca1522e0c
   languageName: node
   linkType: hard
 
@@ -2847,6 +2863,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"dompurify@npm:^3.2.6":
+  version: 3.2.6
+  resolution: "dompurify@npm:3.2.6"
+  dependencies:
+    "@types/trusted-types": "npm:^2.0.7"
+  dependenciesMeta:
+    "@types/trusted-types":
+      optional: true
+  checksum: 10c0/c8f8e5b0879a0d93c84a2e5e78649a47d0c057ed0f7850ca3d573d2cca64b84fb1ff85bd4b20980ade69c4e5b80ae73011340f1c2ff375c7ef98bb8268e1d13a
+  languageName: node
+  linkType: hard
+
 "eastasianwidth@npm:^0.2.0":
   version: 0.2.0
   resolution: "eastasianwidth@npm:0.2.0"
@@ -3264,6 +3292,7 @@ __metadata:
     "@radix-ui/react-toggle": "npm:^1.1.0"
     "@radix-ui/react-visually-hidden": "npm:^1.1.0"
     "@tanstack/react-query": "npm:^5.48.0"
+    "@tiptap/extension-heading": "npm:^2.12.0"
     "@tiptap/pm": "npm:^2.6.6"
     "@tiptap/react": "npm:^2.6.6"
     "@tiptap/starter-kit": "npm:^2.6.6"
@@ -3278,6 +3307,7 @@ __metadata:
     clsx: "npm:^2.1.1"
     cmdk: "npm:^1.0.0"
     date-fns: "npm:^3.6.0"
+    dompurify: "npm:^3.2.6"
     eslint: "npm:^8.57.0"
     eslint-plugin-react-hooks: "npm:^4.6.2"
     eslint-plugin-react-refresh: "npm:^0.4.7"

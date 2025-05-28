@@ -4,6 +4,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import BookmarkToogle, { BookmarkButton } from "./BookmarkToggle";
 import { Dot } from "lucide-react";
+import { stripHtml } from "../lib/utils";
 
 type ArticleItemProps = {
   article: Article;
@@ -88,8 +89,8 @@ export default function ArticleItem({ article, isMini }: ArticleItemProps) {
                 <h3 className="mb-2 line-clamp-3 text-2xl font-bold">
                   {article.title}
                 </h3>
-                <p className="mb-2 line-clamp-1 text-gray-600">
-                  {article.content}
+                <p className="mb-2 line-clamp-2 text-gray-600">
+                  {stripHtml(article.content)}
                 </p>
               </div>
               <div className="flex items-center justify-between">

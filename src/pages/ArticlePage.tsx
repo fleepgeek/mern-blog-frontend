@@ -8,6 +8,7 @@ import { cn } from "../lib/utils";
 import CommentsSheet from "../components/CommentsSheet";
 import BookmarkToogle, { BookmarkButton } from "../components/BookmarkToggle";
 import { useAuth0 } from "@auth0/auth0-react";
+import HtmlRenderer from "../components/HtmlRenderer";
 
 export default function ArticlePage() {
   const { id } = useParams();
@@ -85,7 +86,7 @@ export default function ArticlePage() {
             )}
           </div>
 
-          <div>{article.content}</div>
+          <HtmlRenderer html={article.content} />
         </div>
 
         <div>

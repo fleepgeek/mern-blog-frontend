@@ -1,11 +1,11 @@
 import {
   type Editor as EditorType,
   EditorContent,
-  EditorProvider,
-  useCurrentEditor,
   useEditor,
+  mergeAttributes,
 } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import Heading from "@tiptap/extension-heading";
 import { Toggle } from "./ui/toggle";
 import {
   FontBoldIcon,
@@ -20,24 +20,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-import React, { memo, useEffect, useLayoutEffect, useState } from "react";
+import React, { memo, useState } from "react";
 
 const extensions = [
   StarterKit.configure({
-    heading: {
-      levels: [1, 2, 3],
-      HTMLAttributes: {
-        // class: "text-3xl font-bold",
-      },
-    },
+    heading: false,
     bulletList: {
       HTMLAttributes: {
-        class: "list-disc pl-3",
+        class: "list-disc px-3 my-4 ml-6",
       },
     },
     orderedList: {
       HTMLAttributes: {
-        class: "list-decimal pl-3",
+        class: "list-decimal px-3 my-4 ml-6",
       },
     },
     code: {
@@ -51,12 +46,34 @@ const extensions = [
       },
     },
   }),
+  Heading.configure({
+    levels: [1, 2, 3],
+    HTMLAttributes: { class: "my-4" },
+  }).extend({
+    levels: [1, 2, 3],
+    renderHTML({ node, HTMLAttributes }) {
+      const level = this.options.levels.includes(node.attrs.level)
+        ? node.attrs.level
+        : this.options.levels[0];
+      const classes: { [index: number]: string } = {
+        1: "text-4xl font-bold mb-4",
+        2: "text-3xl font-bold mb-3",
+        3: "text-2xl font-bold mb-2",
+      };
+      return [
+        `h${level}`,
+        mergeAttributes(this.options.HTMLAttributes, HTMLAttributes, {
+          class: `${classes[level]}`,
+        }),
+        0,
+      ];
+    },
+  }),
 ];
 
 type EditorProps = {
   content: string;
   onChange: (value: string) => void;
-  // pathname: string;
 };
 
 // export default function Editor({ content, onChange }: EditorProps) {
@@ -82,47 +99,17 @@ const Editor = React.forwardRef<HTMLDivElement, EditorProps>(
       },
     });
 
-    // useLayoutEffect(() => {
-    //   editor?.commands.clearContent();
-    // }, [editor?.commands]);
-
-    // useEffect(() => {
-    //   // editor?.commands.clearContent()
-    //   if (content) {
-    //     editor?.commands.clearContent();
-    //   }
-    // }, [content, editor?.commands]);
-
     return (
       <>
         <Toolbar editor={editor} />
         <EditorContent ref={forwardedRef} editor={editor} {...props} />
       </>
     );
-    // return (
-    //   <EditorProvider
-    //     extensions={extensions}
-    //     content={content}
-    //     onUpdate={({ editor }) => {
-    //       onChange(editor.getHTML());
-    //     }}
-    //     editorProps={{
-    //       attributes: {
-    //         class:
-    //           "editor min-h-[150px] rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50",
-    //       },
-    //     }}
-    //     slotBefore={<Toolbar />}
-    //   ></EditorProvider>
-    // );
   },
 );
 // }
 
 export default Editor;
-
-// function Toolbar() {
-//   const { editor } = useCurrentEditor();
 
 type ToolbarProps = {
   editor: EditorType | null;
