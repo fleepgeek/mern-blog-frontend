@@ -17,6 +17,7 @@ import { Article } from "../types";
 import ImagePicker from "../components/ImagePicker";
 import { useLocation, useNavigate } from "react-router-dom";
 import Editor from "../components/Editor";
+import DOMPurify from "dompurify";
 // import { Textarea } from "../components/ui/textarea";
 
 const formSchema = z.object({
@@ -76,12 +77,12 @@ export default function SaveArticleForm({
       imageFile: undefined,
     });
   }, [article, form, savedData]);
-
   const onSubmit = async (articleFormObject: ArticleFormObject) => {
+    const sanitizedContent = DOMPurify.sanitize(articleFormObject.content);
     const formData = new FormData();
     formData.append("title", articleFormObject.title);
     formData.append("category", articleFormObject.category);
-    formData.append("content", articleFormObject.content);
+    formData.append("content", sanitizedContent);
 
     if (articleFormObject.imageFile) {
       formData.append("imageFile", articleFormObject.imageFile);
