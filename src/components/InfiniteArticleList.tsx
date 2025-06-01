@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 import ArticleItem from "./ArticleItem";
 import { InfiniteData } from "@tanstack/react-query";
-import { ArticleApiResponse } from "../types";
+import { ArticleApiResponse } from "../lib/types";
 import { Button } from "./ui/button";
 
 type InfiniteArticleListProps = {

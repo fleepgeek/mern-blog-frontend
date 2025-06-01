@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 import { buttonVariants } from "./ui/button";
-import { Category } from "../types";
+import { Category } from "../lib/types";
 import { cn } from "../lib/utils";
 
 type CategoryChipProps = {

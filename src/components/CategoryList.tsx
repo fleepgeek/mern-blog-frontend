@@ -1,4 +1,4 @@
-import { Category } from "../types";
+import { Category } from "../lib/types";
 import CategoryChip from "./CategoryChip";
 
 type CategoryListProps = {

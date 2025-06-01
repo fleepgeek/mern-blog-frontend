@@ -1,6 +1,6 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Article, User } from "../types";
+import { Article, User } from "../lib/types";
 import { toast } from "sonner";
 import { UserFormData } from "../forms/UserProfileForm";
 

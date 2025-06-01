@@ -1,5 +1,5 @@
 import { CircleUserRound, Ellipsis } from "lucide-react";
-import { Comment } from "../types";
+import { Comment } from "../lib/types";
 import { formatDistance } from "date-fns";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { useGetCurrentUser } from "../api/UserApi";

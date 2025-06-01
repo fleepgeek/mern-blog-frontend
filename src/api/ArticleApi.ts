@@ -10,7 +10,7 @@ import {
   ArticleApiResponse,
   ArticleQueryObject,
   Category,
-} from "../types";
+} from "../lib/types";
 import { useAuth0 } from "@auth0/auth0-react";
 import { toast } from "sonner";
 

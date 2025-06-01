@@ -1,4 +1,4 @@
-import { FilterOption } from "../types";
+import { FilterOption } from "../lib/types";
 import {
   Select,
   SelectContent,

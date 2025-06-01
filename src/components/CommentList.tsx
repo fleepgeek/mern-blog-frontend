@@ -1,4 +1,4 @@
-import { Comment } from "../types";
+import { Comment } from "../lib/types";
 import { Separator } from "./ui/separator";
 
 type CommentListProps = {

@@ -1,5 +1,5 @@
 import { format, formatDistance } from "date-fns";
-import { Article } from "../types";
+import { Article } from "../lib/types";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import BookmarkToogle, { BookmarkButton } from "./BookmarkToggle";

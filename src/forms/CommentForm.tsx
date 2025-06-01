@@ -10,7 +10,7 @@ import {
 } from "../components/ui/form";
 import { Textarea } from "../components/ui/textarea";
 import LoadingButton from "../components/LoadingButton";
-import { Comment } from "../types";
+import { Comment } from "../lib/types";
 import { Button } from "../components/ui/button";
 import { CommentRequestData } from "../api/CommentApi";
 

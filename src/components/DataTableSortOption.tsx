@@ -1,4 +1,4 @@
-import { SortOption } from "../types";
+import { SortOption } from "../lib/types";
 import {
   Select,
   SelectContent,

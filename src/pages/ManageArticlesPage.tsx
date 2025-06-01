@@ -6,7 +6,7 @@ import {
 import { useSearchParams } from "react-router-dom";
 import NewArticleButton from "../components/NewArticleButton";
 import ArticleTable from "../components/ArticleTable";
-import { ArticleQueryObject, FilterOption, SortOption } from "../types";
+import { ArticleQueryObject, FilterOption, SortOption } from "../lib/types";
 import { SearchData } from "../lib/validations";
 import DataTableSearchBox from "../components/DataTableSearchBox";
 import DataTableToolbar from "../components/DataTableToolbar";

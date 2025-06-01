@@ -13,7 +13,7 @@ import { Input } from "../components/ui/input";
 import LoadingButton from "../components/LoadingButton";
 import ComboBox from "../components/ComboBox";
 import { useEffect } from "react";
-import { Article } from "../types";
+import { Article } from "../lib/types";
 import ImagePicker from "../components/ImagePicker";
 import { useLocation, useNavigate } from "react-router-dom";
 import Editor from "../components/Editor";

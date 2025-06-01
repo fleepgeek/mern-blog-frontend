@@ -10,7 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from "./ui/table";
-import { Article, PagingInfo } from "../types";
+import { Article, PagingInfo } from "../lib/types";
 import PaginationControl from "./PaginationControl";
 import { useDeleteArticle } from "../api/ArticleApi";
 import {

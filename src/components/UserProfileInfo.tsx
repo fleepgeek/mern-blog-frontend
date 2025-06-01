@@ -1,4 +1,4 @@
-import { User } from "../types";
+import { User } from "../lib/types";
 
 type UserProfileInfoProps = {
   user: User;
