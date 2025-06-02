@@ -15,8 +15,8 @@ export default function DashboardLayout() {
     <>
       <Header />
 
-      <div className="container gap-16 py-10 md:grid lg:grid-cols-4">
-        <aside className="mb-16 self-start rounded-lg border border-black p-2 text-sm md:min-h-[250px]">
+      <div className="container gap-16 py-10 md:grid md:grid-cols-4">
+        <aside className="col-span-1 mb-16 self-start rounded-lg border border-black p-2 text-sm md:min-h-[250px]">
           <div className="px-2 font-light">
             <p>{user?.name}</p>
             <p className="line-clamp-1">{user?.email}</p>
@@ -47,7 +47,7 @@ export default function DashboardLayout() {
           </ul>
         </aside>
 
-        <main className="col-span-2 md:col-start-2">
+        <main className="col-span-3">
           <Outlet />
         </main>
       </div>

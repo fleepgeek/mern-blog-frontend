@@ -58,71 +58,77 @@ export default function ArticleTable({
   return (
     <div className="flex flex-col gap-6">
       <>{children}</>
-      <Table>
-        <TableCaption>A list of articles written by you.</TableCaption>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Title</TableHead>
-            <TableHead className="text-right">Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {articles.map((article) => (
-            <TableRow key={article._id}>
-              <TableCell>{article.title}</TableCell>
-              <TableCell className="text-right">
-                <div className="flex justify-end gap-2">
-                  <Link
-                    to={`/edit-article/${article._id}`}
-                    className={`${buttonVariants({ variant: "ghost" })} rounded-3xl bg-gray-200 px-[0.4rem] hover:bg-gray-300`}
-                  >
-                    <SquarePen size={16} className="mr-1" />{" "}
-                    <p className="text-xs">Edit</p>
-                  </Link>
-
-                  <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                      <LoadingButton
-                        type="button"
-                        isLoading={isLoading && article._id === deletingItem}
-                        loadingText=""
-                        className="max-h-fit bg-red-500"
+      <div className="-mx-8 flex overflow-x-auto">
+        <div className="flex-1 px-8">
+          <Table>
+            <TableCaption>A list of articles written by you.</TableCaption>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Title</TableHead>
+                <TableHead className="text-right">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {articles.map((article) => (
+                <TableRow key={article._id}>
+                  <TableCell>{article.title}</TableCell>
+                  <TableCell className="text-right">
+                    <div className="flex justify-end gap-2">
+                      <Link
+                        to={`/edit-article/${article._id}`}
+                        className={`${buttonVariants({ variant: "ghost" })} rounded-3xl bg-gray-200 px-[0.4rem] hover:bg-gray-300`}
                       >
-                        <Trash2Icon width={16} />
-                      </LoadingButton>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>
-                          Are you sure you want to delete this article?
-                        </AlertDialogTitle>
-                        <AlertDialogDescription>
-                          This action cannot be undone. This will permanently
-                          delete the article.
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction asChild>
-                          <Button
-                            variant="destructive"
-                            onClick={() => {
-                              onDelete(article._id);
-                              setDeletingItem(article._id);
-                            }}
+                        <SquarePen size={16} className="mr-1" />{" "}
+                        <p className="text-xs">Edit</p>
+                      </Link>
+
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <LoadingButton
+                            type="button"
+                            isLoading={
+                              isLoading && article._id === deletingItem
+                            }
+                            loadingText=""
+                            className="max-h-fit bg-red-500"
                           >
-                            Delete
-                          </Button>
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+                            <Trash2Icon width={16} />
+                          </LoadingButton>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>
+                              Are you sure you want to delete this article?
+                            </AlertDialogTitle>
+                            <AlertDialogDescription>
+                              This action cannot be undone. This will
+                              permanently delete the article.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction asChild>
+                              <Button
+                                variant="destructive"
+                                onClick={() => {
+                                  onDelete(article._id);
+                                  setDeletingItem(article._id);
+                                }}
+                              >
+                                Delete
+                              </Button>
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+      </div>
 
       {pagingInfo.total > articles.length && (
         <PaginationControl
