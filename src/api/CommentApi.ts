@@ -1,6 +1,6 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Comment } from "../lib/types";
+import { Comment, User } from "../lib/types";
 import { toast } from "sonner";
 import { CommentFormData } from "../forms/CommentForm";
 
@@ -34,7 +34,7 @@ export type CommentRequestData = CommentFormData & {
   commentId?: string;
 };
 
-export const usePostComment = (articleId: string) => {
+export const usePostComment = (articleId: string, currentUser?: User) => {
   const { getAccessTokenSilently } = useAuth0();
   const postCommentRequest = async (
     commentData: CommentRequestData,
@@ -68,6 +68,48 @@ export const usePostComment = (articleId: string) => {
     data,
   } = useMutation({
     mutationFn: postCommentRequest,
+    onMutate: async (newComment) => {
+      // Cancel any outgoing refetches
+      // (so they don't overwrite our optimistic update)
+      await queryClient.cancelQueries({
+        queryKey: ["fetch-article-comments", articleId],
+      });
+
+      // Snapshot the previous value
+      const previousComments = queryClient.getQueryData([
+        "fetch-article-comments",
+        articleId,
+      ]);
+
+      // Optimistically add new comment
+      queryClient.setQueryData(
+        ["fetch-article-comments", articleId],
+        (oldComments: Comment[] = []) => {
+          if (!currentUser) {
+            throw new Error("User must be authenticated to comment");
+          }
+          const optimisticComment: Comment = {
+            _id: "temp-id" + Date.now(),
+            content: newComment.content,
+            articleId,
+            user: currentUser,
+            createdAt: new Date().toISOString(),
+          };
+
+          return [...oldComments, optimisticComment];
+        },
+      );
+
+      // Return a context object with the snapshotted value
+      return { previousComments };
+    },
+    onError: (_err, _newContent, context) => {
+      // Rollback on error
+      queryClient.setQueryData(
+        ["fetch-article-comments", articleId],
+        context?.previousComments,
+      );
+    },
     onSuccess: () => {
       toast.success("Comment Added");
       queryClient.invalidateQueries({

@@ -23,6 +23,7 @@ import { useTrackScreenWidth } from "../lib/hooks";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useLocation, useSearchParams } from "react-router-dom";
 import CommentItem, { PublicCommentItem } from "./CommentItem";
+import { useGetCurrentUser } from "../api/UserApi";
 
 type CommentsSheetProps = {
   articleId: string;
@@ -37,8 +38,11 @@ export default function CommentsSheet({ articleId }: CommentsSheetProps) {
     searchParam.get("open_comments_sheet") === "true" ? true : false,
   );
 
-  const { postComment, isLoading: isPostingComment } =
-    usePostComment(articleId);
+  const { currentUser } = useGetCurrentUser();
+  const { postComment, isLoading: isPostingComment } = usePostComment(
+    articleId,
+    currentUser,
+  );
   const { comments, isLoading: isArticleCommentsLoading } =
     useGetArticleComments(articleId);
   const {

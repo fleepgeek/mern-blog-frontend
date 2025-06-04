@@ -1,9 +1,9 @@
 export type User = {
   _id: string;
   name: string;
-  bio: string;
+  bio?: string;
   email: string;
-  bookmarkedIds: string[];
+  bookmarkedIds?: string[];
 };
 
 export type Category = {
@@ -59,7 +59,7 @@ export type FilterOption = {
 export type Comment = {
   _id: string;
   user: User;
-  article: Article;
+  articleId: string;
   content: string;
   createdAt: string;
 };
