@@ -5,13 +5,19 @@ import {
 } from "../api/ArticleApi";
 import { useSearchParams } from "react-router-dom";
 import NewArticleButton from "../components/NewArticleButton";
-import ArticleTable from "../components/ArticleTable";
-import { ArticleQueryObject, FilterOption, SortOption } from "../lib/types";
+import DataTable from "../components/DataTable";
+import {
+  Article,
+  ArticleQueryObject,
+  FilterOption,
+  SortOption,
+} from "../lib/types";
 import { SearchData } from "../lib/validations";
 import DataTableSearchBox from "../components/DataTableSearchBox";
 import DataTableToolbar from "../components/DataTableToolbar";
 import DataTableSortOption from "../components/DataTableSortOption";
 import DataTableFilterList from "../components/DataTableFilterList";
+import ManageArticleActions from "../components/ManageArticleActions";
 
 const SORT_OPTIONS: SortOption[] = [
   { label: "Newest", value: "newest" },
@@ -36,6 +42,24 @@ export default function ManageArticlesPage() {
       value: category._id,
     }),
   );
+
+  const columns: Array<{
+    id: keyof Article;
+    header: string;
+    className?: string;
+    render?: (value: Article[keyof Article]) => React.ReactNode;
+  }> = [
+    {
+      id: "title",
+      header: "Title",
+    },
+    {
+      id: "_id",
+      header: "Actions",
+      className: "text-right",
+      render: (value) => <ManageArticleActions id={value as string} />,
+    },
+  ];
 
   const setPage = (page: number) => {
     setSearchParams((prevSearchParams) => {
@@ -84,6 +108,11 @@ export default function ManageArticlesPage() {
 
   const { articles, pagingInfo } = data;
 
+  const transformedArticles = articles.map((article) => ({
+    ...article,
+    id: article._id,
+  }));
+
   if (
     !queryObject.searchQuery &&
     articles.length === 0 &&
@@ -107,10 +136,12 @@ export default function ManageArticlesPage() {
         </p>
       </section>
 
-      <ArticleTable
-        articles={articles}
+      <DataTable
+        data={transformedArticles}
+        columns={columns}
         pagingInfo={pagingInfo}
         setPage={setPage}
+        caption="A list of articles created by you"
       >
         <DataTableToolbar>
           <DataTableSearchBox onSearch={handleSearch} onReset={handleReset} />
@@ -125,7 +156,7 @@ export default function ManageArticlesPage() {
             onChange={handleSortChange}
           />
         </DataTableToolbar>
-      </ArticleTable>
+      </DataTable>
     </div>
   );
 }

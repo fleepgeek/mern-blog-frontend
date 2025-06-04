@@ -18,7 +18,6 @@ import ImagePicker from "../components/ImagePicker";
 import { useLocation, useNavigate } from "react-router-dom";
 import Editor from "../components/Editor";
 import DOMPurify from "dompurify";
-// import { Textarea } from "../components/ui/textarea";
 
 const formSchema = z.object({
   title: z.string().min(1, { message: "Title is required" }),
@@ -139,15 +138,10 @@ export default function SaveArticleForm({
             <FormItem>
               <FormLabel>Content</FormLabel>
               <FormControl>
-                {/* <Textarea {...field} /> */}
-
                 <Editor
-                  // key={pathname + "w"}
                   {...field}
                   content={field.value}
                   onChange={field.onChange}
-                  // pathname={pathname}
-                  // onChange={onEditorContentStateChange}
                 />
               </FormControl>
               <FormMessage />
